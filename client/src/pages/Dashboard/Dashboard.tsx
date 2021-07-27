@@ -7,32 +7,69 @@ import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
+import DashboardHeader from './DashboardHeader';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
 
-  const { loggedInUser } = useAuth();
-  const { initSocket } = useSocket();
+  //const { loggedInUser } = useAuth();
+  //const { initSocket } = useSocket();
 
-  const history = useHistory();
+  //const history = useHistory();
 
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
+  // useEffect(() => {
+  //   initSocket();
+  // }, [initSocket]);
 
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser) {
-    history.push('/login');
-    // loading for a split seconds until history.push works
-    return <CircularProgress />;
-  }
+  // if (loggedInUser === undefined) return <CircularProgress />;
+  // if (!loggedInUser) {
+  //   history.push('/login');
+  //   // loading for a split seconds until history.push works
+  //   return <CircularProgress />;
+  // }
+
+  // return (
+  //   <Grid container component="main" className={`${classes.root} ${classes.dashboard}`}>
+  //     <CssBaseline />
+  //     <Grid item className={classes.drawerWrapper}>
+  //       <ChatSideBanner loggedInUser={loggedInUser} />
+  //     </Grid>
+  //   </Grid>
+  // );
 
   return (
-    <Grid container component="main" className={`${classes.root} ${classes.dashboard}`}>
+    <Grid container direction="column" className={`${classes.root} ${classes.dashboard}`}>
       <CssBaseline />
-      <Grid item className={classes.drawerWrapper}>
-        <ChatSideBanner loggedInUser={loggedInUser} />
-      </Grid>
+      <header className="dashboard--header">
+        <div className="dashboard--header--branding">
+          <div className="branding--logo">
+            <img src="logo.png" alt="logo" />
+          </div>
+          <div className="branding--company-name">Kanban</div>
+        </div>
+        <nav className="dashboard--header--nav">
+          <ul>
+            <li className="nav--item active">
+              <a href="#">Dashboard</a>
+            </li>
+            <li className="nav--item">
+              <a href="#">Calendar</a>
+            </li>
+          </ul>
+        </nav>
+        <div className="dashboard--header--actions">
+          <button className="actions--create-board">Create Board</button>
+        </div>
+        <div className="dashboard--header--user">
+          <img src="avatar.png" alt="avatar" className="user--avatar" />
+        </div>
+      </header>
+      <main className="main">
+        <header className="main--header">
+          <h1>My School Board</h1>
+          <nav className="menu">H</nav>
+        </header>
+      </main>
     </Grid>
   );
 }
