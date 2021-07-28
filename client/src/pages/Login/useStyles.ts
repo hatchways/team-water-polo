@@ -22,6 +22,11 @@ const useStyles = makeStyles(() => ({
     fontWeight: 700,
     fontFamily: "'Open Sans'",
   },
+  introImage: {
+    objectFit: 'cover',
+    height: '100%',
+    width: '100%',
+  },
 }));
 
 export default useStyles;

@@ -10,6 +10,7 @@ import SignUpForm from './SignUpForm/SignUpForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import logo from '../../Images/bg-01.jpg';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
@@ -39,6 +40,9 @@ export default function Register(): JSX.Element {
 
   return (
     <Grid container component="main" className={classes.root}>
+      <Grid item xs={12} sm={8} md={5} elevation={6} component={Paper} square>
+        <img src={logo} alt="" className={classes.introImage} />
+      </Grid>
       <CssBaseline />
       <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
         <Box className={classes.authWrapper}>
