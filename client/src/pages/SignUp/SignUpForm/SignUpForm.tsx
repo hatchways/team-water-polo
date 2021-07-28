@@ -27,9 +27,10 @@ interface Props {
       username: string;
     }>,
   ) => void;
+  demoLogin: ({}) => void;
 }
 
-const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
+const SignUpForm = ({ handleSubmit, demoLogin }: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -110,6 +111,16 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
           <Box textAlign="center">
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Create'}
+            </Button>
+            <Button
+              onClick={demoLogin}
+              type="button"
+              size="large"
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+            >
+              Login as Demo
             </Button>
           </Box>
         </form>

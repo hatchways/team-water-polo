@@ -37,6 +37,10 @@ export default function Login(): JSX.Element {
     });
   };
 
+  const demoLogin = () => {
+    console.log('Demo-login');
+  };
+
   return (
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12} sm={8} md={5} elevation={6} component={Paper} square>
@@ -54,7 +58,7 @@ export default function Login(): JSX.Element {
                 </Typography>
               </Grid>
             </Grid>
-            <LoginForm handleSubmit={handleSubmit} />
+            <LoginForm handleSubmit={handleSubmit} demoLogin={demoLogin} />
           </Box>
           <Box p={1} alignSelf="center" />
         </Box>
