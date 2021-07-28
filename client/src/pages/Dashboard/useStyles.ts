@@ -24,9 +24,20 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
 
       '& .branding--logo': {
-        display: 'inline-block',
         width: '2rem',
         height: '2rem',
+        background: 'var(--accent-color)',
+        color: 'white',
+        borderRadius: '0.60rem',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: '1rem',
+
+        '& svg': {
+          width: '75%',
+          height: '75%',
+        },
       },
 
       '& .branding--company-name': {

@@ -8,6 +8,9 @@ import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
 import DashboardHeader from './DashboardHeader';
+import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
+import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -43,7 +46,7 @@ export default function Dashboard(): JSX.Element {
       <header className="dashboard--header">
         <div className="dashboard--header--branding">
           <div className="branding--logo">
-            <img src="logo.png" alt="logo" />
+            <DashboardRoundedIcon />
           </div>
           <div className="branding--company-name">Kanban</div>
         </div>
@@ -61,13 +64,15 @@ export default function Dashboard(): JSX.Element {
           <button className="actions--create-board">Create Board</button>
         </div>
         <div className="dashboard--header--user">
-          <img src="avatar.png" alt="avatar" className="user--avatar" />
+          <img src={Avatar} alt="avatar" className="user--avatar" />
         </div>
       </header>
       <main className="main">
         <header className="main--header">
           <h1>My School Board</h1>
-          <nav className="menu">H</nav>
+          <nav className="menu">
+            <MenuRoundedIcon />
+          </nav>
         </header>
       </main>
     </Grid>
