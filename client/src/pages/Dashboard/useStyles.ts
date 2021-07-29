@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
   },
+
   dashboard: {
     '--accent-color': '#759CFC',
     '& .dashboard--header': {
@@ -18,32 +19,6 @@ const useStyles = makeStyles((theme) => ({
       boxSizing: 'border-box',
       height: '5rem',
       alignItems: 'center',
-    },
-
-    '& .dashboard--header--branding': {
-      display: 'flex',
-
-      '& .branding--logo': {
-        width: '2rem',
-        height: '2rem',
-        background: 'var(--accent-color)',
-        color: 'white',
-        borderRadius: '0.60rem',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: '1rem',
-
-        '& svg': {
-          width: '75%',
-          height: '75%',
-        },
-      },
-
-      '& .branding--company-name': {
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
-      },
     },
 
     '& .dashboard--header--nav ul': {
@@ -58,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
           color: 'black',
           textDecoration: 'none',
           fontWeight: 'bold',
+          display: 'inline-flex',
+          gap: '0.5rem',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
         },
         '&.active a': { color: 'var(--accent-color)' },
       },
@@ -72,16 +51,20 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
         backgroundColor: 'var(--accent-color)',
         border: 'none',
-        padding: '0.75rem 1.5rem',
+        padding: '0.6rem 1.5rem',
         borderRadius: '0.25rem',
+        display: 'inline-flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        gap: '0.5rem',
       },
     },
 
     '& .dashboard--header--user': {
       '& .user--avatar': {
         display: 'inline-block',
-        width: '2rem',
-        height: '2rem',
+        width: '3rem',
+        height: '3rem',
         borderRadius: '50%',
       },
     },
@@ -100,7 +83,13 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
       },
     },
+
+    '& .material-icons-outlined': {
+      fontFamily: 'Material Icons Outlined',
+      fontSize: '2em',
+    },
   },
+
   drawerWrapper: {
     width: drawerWidth,
     [theme.breakpoints.up('md')]: {

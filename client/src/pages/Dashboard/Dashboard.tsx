@@ -9,7 +9,7 @@ import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
 import DashboardHeader from './DashboardHeader';
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
-import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
+import Logo from '../../Images/logo.png';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 
 export default function Dashboard(): JSX.Element {
@@ -46,22 +46,30 @@ export default function Dashboard(): JSX.Element {
       <header className="dashboard--header">
         <div className="dashboard--header--branding">
           <div className="branding--logo">
-            <DashboardRoundedIcon />
+            <img src={Logo} alt="Kanban Logo" />
           </div>
-          <div className="branding--company-name">Kanban</div>
         </div>
         <nav className="dashboard--header--nav">
           <ul>
             <li className="nav--item active">
-              <a href="#">Dashboard</a>
+              <a href="#">
+                <span className="material-icons-outlined">space_dashboard</span>
+                Dashboard
+              </a>
             </li>
             <li className="nav--item">
-              <a href="#">Calendar</a>
+              <a href="#">
+                <span className="material-icons-outlined">calendar_today</span>
+                Calendar
+              </a>
             </li>
           </ul>
         </nav>
         <div className="dashboard--header--actions">
-          <button className="actions--create-board">Create Board</button>
+          <button className="actions--create-board">
+            <span className="material-icons-outlined">add</span>
+            Create Board
+          </button>
         </div>
         <div className="dashboard--header--user">
           <img src={Avatar} alt="avatar" className="user--avatar" />
@@ -71,7 +79,7 @@ export default function Dashboard(): JSX.Element {
         <header className="main--header">
           <h1>My School Board</h1>
           <nav className="menu">
-            <MenuRoundedIcon />
+            <span className="material-icons-outlined">menu</span>
           </nav>
         </header>
       </main>
