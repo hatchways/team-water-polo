@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
 import DashboardHeader from './DashboardHeader';
-import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
 import Logo from '../../Images/logo.png';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 
