@@ -26,6 +26,7 @@ export default function Login(): JSX.Element {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
+        console.log('data---', data);
         updateLoginContext(data.success);
       } else {
         // should not get here from backend but this catch is for an unknown issue
@@ -38,7 +39,20 @@ export default function Login(): JSX.Element {
   };
 
   const demoLogin = () => {
-    console.log('Demo-login');
+    const email = 'demo@demo.com';
+    const password = 'test12345';
+    login(email, password).then((data) => {
+      if (data.error) {
+        updateSnackBarMessage(data.error.message);
+      } else if (data.success) {
+        console.log('data---', data);
+        updateLoginContext(data.success);
+      } else {
+        // should not get here from backend but this catch is for an unknown issue
+        console.error({ data });
+        updateSnackBarMessage('An unexpected error occurred. Please try again');
+      }
+    });
   };
 
   return (
