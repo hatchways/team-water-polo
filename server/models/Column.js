@@ -15,4 +15,4 @@ const columnSchema = new mongoose.Schema({
   ]
 });
 
-module.exports = Column = mongoose.model("column", columnSchema);
+module.exports = Column = mongoose.model("Column", columnSchema);

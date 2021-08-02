@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
     '& .MuiInput-underline:before': {
@@ -14,6 +14,9 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     minHeight: '100vh',
     paddingTop: 23,
+    '& .makeStyles-authHeader-6': {
+      justifyContent: 'center',
+    },
   },
   welcome: {
     fontSize: 26,
