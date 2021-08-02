@@ -18,5 +18,14 @@ const boardSchema = new mongoose.Schema({
     },
     username: String,
     required: true
-  }
+  },
+
+  columns : [
+    {
+			type : mongoose.Schema.Types.ObjectId,
+			ref  : "Column"
+		}
+  ]
 });
+
+module.exports = Board = mongoose.model("board", boardSchema);
