@@ -8,12 +8,8 @@ const register = async (username: string, email: string, password: string): Prom
     body: JSON.stringify({ username, email, password }),
     credentials: 'include',
   };
-  console.log('From helper----');
   return await fetch(`/auth/register`, fetchOptions)
-    .then((res) => {
-      console.log(res);
-      return res.json();
-    })
+    .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
     }));

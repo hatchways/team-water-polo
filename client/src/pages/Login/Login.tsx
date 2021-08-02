@@ -26,7 +26,6 @@ export default function Login(): JSX.Element {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
-        console.log('data---', data);
         updateLoginContext(data.success);
       } else {
         // should not get here from backend but this catch is for an unknown issue
