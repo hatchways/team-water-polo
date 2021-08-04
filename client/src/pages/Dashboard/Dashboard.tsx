@@ -45,8 +45,14 @@ export default function Dashboard(): JSX.Element {
       <header className="dashboard--header">
         <div className="dashboard--header--branding">
           <div className="branding--logo">
-            <img src={Logo} alt="Kanban Logo" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="8" height="10" rx=".5" />
+              <rect x="3" y="15" width="8" height="6" rx=".5" />
+              <rect x="13" y="3" width="8" height="6" rx=".5" />
+              <rect x="13" y="11" width="8" height="10" rx=".5" />
+            </svg>
           </div>
+          <div className="branding--name">Kanban</div>
         </div>
         <nav className="dashboard--header--nav">
           <ul>

@@ -21,6 +21,34 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
     },
 
+    '& .dashboard--header--branding': {
+      display: 'flex',
+      gap: '2rem',
+    },
+    '& .branding--logo': {
+      width: '3rem',
+      height: '3rem',
+      padding: '0.35rem',
+      borderRadius: '40%',
+      background: 'var(--accent-color)',
+
+      '& svg': {
+        width: '100%',
+        height: '100%',
+        fill: 'white',
+
+        '& rect:nth-child(3n+1)': {
+          opacity: '0.5',
+        },
+      },
+    },
+
+    '& .branding--name': {
+      fontSize: '2rem',
+      fontFamily: "'Montserrat', sans-serif",
+      fontWeight: '700',
+    },
+
     '& .dashboard--header--nav ul': {
       listStyle: 'none',
       margin: 0,
@@ -76,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
       boxSizing: 'border-box',
       display: 'flex',
       justifyContent: 'space-between',
+      alignItems: 'center',
 
       '& h1': {
         fontSize: '1rem',
