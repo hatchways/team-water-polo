@@ -7,9 +7,11 @@ import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
-import DashboardHeader from './DashboardHeader';
-import Logo from '../../Images/logo.png';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
+import BrandingLogo from './BrandingLogo';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -42,44 +44,39 @@ export default function Dashboard(): JSX.Element {
   return (
     <Grid container direction="column" className={`${classes.root} ${classes.dashboard}`}>
       <CssBaseline />
-      <header className="dashboard--header">
-        <div className="dashboard--header--branding">
-          <div className="branding--logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <rect x="3" y="3" width="8" height="10" rx=".5" />
-              <rect x="3" y="15" width="8" height="6" rx=".5" />
-              <rect x="13" y="3" width="8" height="6" rx=".5" />
-              <rect x="13" y="11" width="8" height="10" rx=".5" />
-            </svg>
-          </div>
+      <Grid
+        container
+        item
+        component="header"
+        className="dashboard--header"
+        xs={12}
+        alignItems="center"
+        wrap="nowrap"
+        justifyContent="space-between"
+      >
+        <Grid container item xs={3} alignItems="center" className={classes.branding} justifyContent="flex-start">
+          <BrandingLogo />
           <div className="branding--name">Kanban</div>
-        </div>
-        <nav className="dashboard--header--nav">
-          <ul>
-            <li className="nav--item active">
-              <a href="#">
-                <span className="material-icons-outlined">space_dashboard</span>
-                Dashboard
-              </a>
-            </li>
-            <li className="nav--item">
-              <a href="#">
-                <span className="material-icons-outlined">calendar_today</span>
-                Calendar
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div className="dashboard--header--actions">
-          <button className="actions--create-board">
-            <span className="material-icons-outlined">add</span>
-            Create Board
-          </button>
-        </div>
-        <div className="dashboard--header--user">
-          <img src={Avatar} alt="avatar" className="user--avatar" />
-        </div>
-      </header>
+        </Grid>
+        <Grid container item xs={6} component="nav" className="dashboard--header--nav" justifyContent="center">
+          <Button startIcon={<Icon>space_dashboard</Icon>} className="nav--item active">
+            Dashboard
+          </Button>
+          <Button startIcon={<Icon>calendar_today</Icon>} className="nav--item">
+            Calendar
+          </Button>
+        </Grid>
+        <Button
+          startIcon={<Icon>add</Icon>}
+          variant="contained"
+          style={{ backgroundColor: 'var(--accent-color)', color: 'white' }}
+        >
+          Create Board
+        </Button>
+        <IconButton className="user-button">
+          <img src={Avatar} alt="avatar" />
+        </IconButton>
+      </Grid>
       <main className="main">
         <header className="main--header">
           <h1>My School Board</h1>
