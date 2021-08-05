@@ -47,44 +47,40 @@ export default function Dashboard(): JSX.Element {
       <Grid
         container
         item
+        xs={12}
         component="header"
         className="dashboard--header"
-        xs={12}
+        justifyContent="space-between"
         alignItems="center"
         wrap="nowrap"
-        justifyContent="space-between"
       >
         <Grid container item xs={3} alignItems="center" className={classes.branding} justifyContent="flex-start">
           <BrandingLogo />
           <div className="branding--name">Kanban</div>
         </Grid>
         <Grid container item xs={6} component="nav" className="dashboard--header--nav" justifyContent="center">
-          <Button startIcon={<Icon>space_dashboard</Icon>} className="nav--item active">
+          <Button startIcon={<Icon>space_dashboard</Icon>} className="nav--item active" color="primary">
             Dashboard
           </Button>
           <Button startIcon={<Icon>calendar_today</Icon>} className="nav--item">
             Calendar
           </Button>
         </Grid>
-        <Button
-          startIcon={<Icon>add</Icon>}
-          variant="contained"
-          style={{ backgroundColor: 'var(--accent-color)', color: 'white' }}
-        >
+        <Button className="create-board" startIcon={<Icon>add</Icon>} variant="contained" color="primary">
           Create Board
         </Button>
         <IconButton className="user-button">
           <img src={Avatar} alt="avatar" />
         </IconButton>
       </Grid>
-      <main className="main">
-        <header className="main--header">
-          <h1>My School Board</h1>
-          <nav className="menu">
-            <span className="material-icons-outlined">menu</span>
-          </nav>
-        </header>
-      </main>
+      <Grid container item xs={12} component="main">
+        <Grid container item xs={12} className="main--header">
+          <Grid item xs={6} component="h1">
+            My School Board
+          </Grid>
+          <Icon>menu</Icon>
+        </Grid>
+      </Grid>
     </Grid>
   );
 }
