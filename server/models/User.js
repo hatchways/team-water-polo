@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  register_date: {
+  registerDate: {
     type: Date,
     default: Date.now
   }

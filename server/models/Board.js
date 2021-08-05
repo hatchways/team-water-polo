@@ -6,17 +6,17 @@ const boardSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  creation_date: {
+  creationDate: {
     type: Date,
     default: Date.now
   },
 
-  in_progress: {
+  inProgress: {
     type: Boolean,
     default: true
   },
 
-  is_completed: {
+  isCompleted: {
     type: Boolean,
     default: false
   },
