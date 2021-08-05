@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '8px',
   },
   draggingTask: {
-    transform: 'rotate(-5deg)', // gets overridden by dnd properties
+    transform: 'rotate(-5deg)',
+    transition: 'transform 300ms ease',
   },
   tag: {
     backgroundColor: 'green',

@@ -3,7 +3,7 @@ import { IBoardData } from '../../interface/Board';
 const mockData: IBoardData = {
   tasks: {
     'task-1': { id: 'task-1', content: 'Essay on the environment', tag: 'green' },
-    'task-2': { id: 'task-2', content: 'Midterm exam', date: 'March 10', tag: 'red' },
+    'task-2': { id: 'task-2', content: 'Midterm exam', date: new Date(2021, 3, 10), tag: 'red' },
     'task-3': { id: 'task-3', content: 'Practice exam', tag: 'red' },
     'task-4': { id: 'task-4', content: 'Homework', tag: 'red' },
     'task-5': { id: 'task-5', content: 'Workshop', tag: 'orange' },

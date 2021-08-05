@@ -9,7 +9,7 @@ export interface ITask {
     id: string;
     content: string;
     tag?: string;
-    date?: string;
+    date?: Date;
   };
 }
 
@@ -31,5 +31,5 @@ export interface IPropTask {
   id: string;
   content: string;
   tag?: string;
-  date?: string;
+  date?: Date;
 }

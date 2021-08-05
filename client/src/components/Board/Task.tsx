@@ -13,20 +13,24 @@ export default function Task({ task, index }: Props): JSX.Element {
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided, snapshot) => (
-        <Card
+        <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={snapshot.isDragging ? classes.draggingTask : classes.taskContainer}
+          className={classes.taskContainer}
         >
-          <CardContent>
-            <Box className={classes.tag} style={{ backgroundColor: task.tag ?? 'white' }}></Box>
-            <Typography variant="h6" className={classes.taskContent}>
-              <strong>{task.content}</strong>
-            </Typography>
-            <Typography variant="subtitle2">{task.date ?? ''}</Typography>
-          </CardContent>
-        </Card>
+          <Card className={snapshot.isDragging ? classes.draggingTask : undefined}>
+            <CardContent>
+              <Box className={classes.tag} style={{ backgroundColor: task.tag ?? 'white' }}></Box>
+              <Typography variant="h6" className={classes.taskContent}>
+                <strong>{task.content}</strong>
+              </Typography>
+              <Typography variant="subtitle2">
+                {task.date?.toLocaleDateString('en-us', { month: 'long', day: '2-digit' }) ?? ''}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </Draggable>
   );
