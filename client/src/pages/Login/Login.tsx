@@ -37,18 +37,6 @@ export default function Login(): JSX.Element {
     });
   };
 
-  const demoLogin = async () => {
-    const email = 'demo@demo.com';
-    const password = 'test12345';
-    const data = await login(email, password);
-    if (data.success) {
-      updateLoginContext(data.success);
-    }
-    if (data.error) {
-      updateSnackBarMessage(data.error.message);
-    }
-  };
-
   return (
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12} sm={6} md={5} elevation={6} component={Paper} square>
@@ -66,7 +54,7 @@ export default function Login(): JSX.Element {
                 </Typography>
               </Grid>
             </Grid>
-            <LoginForm handleSubmit={handleSubmit} demoLogin={demoLogin} />
+            <LoginForm handleSubmit={handleSubmit} />
           </Box>
           <Box p={1} alignSelf="center" />
         </Box>

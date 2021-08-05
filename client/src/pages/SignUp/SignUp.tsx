@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import login from '../../helpers/APICalls/login';
 import register from '../../helpers/APICalls/register';
 import SignUpForm from './SignUpForm/SignUpForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
@@ -39,22 +38,6 @@ export default function Register(): JSX.Element {
     });
   };
 
-  const demoLogin = () => {
-    const email = 'demo@demo.com';
-    const password = 'test12345';
-    login(email, password).then((data) => {
-      if (data.error) {
-        updateSnackBarMessage(data.error.message);
-      } else if (data.success) {
-        updateLoginContext(data.success);
-      } else {
-        // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
-      }
-    });
-  };
-
   return (
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12} sm={6} md={5} elevation={6} component={Paper} square>
@@ -72,7 +55,7 @@ export default function Register(): JSX.Element {
                 </Typography>
               </Grid>
             </Grid>
-            <SignUpForm handleSubmit={handleSubmit} demoLogin={demoLogin} />
+            <SignUpForm handleSubmit={handleSubmit} />
           </Box>
           <Box p={1} alignSelf="center" />
         </Box>

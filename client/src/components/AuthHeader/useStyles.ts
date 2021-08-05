@@ -7,6 +7,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     flexWrap: 'wrap',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
   },
   accAside: {
     fontSize: 14,

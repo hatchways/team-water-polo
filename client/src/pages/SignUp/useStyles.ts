@@ -14,9 +14,6 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'column',
     minHeight: '100vh',
     paddingTop: 23,
-    '& .makeStyles-authHeader-6': {
-      justifyContent: 'center',
-    },
   },
   welcome: {
     fontSize: 26,
