@@ -12,12 +12,10 @@ const cardSchema = new mongoose.Schema({
     unique: true
   },
 
-  belongsTo : {
-    id: {
+  column: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Column'
     }
-  }
 });
 
 module.exports = Card = mongoose.model("Card", cardSchema);
