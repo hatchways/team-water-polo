@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, useEffect, SyntheticEvent } from 'react';
 import useStyles from './useStyles';
-import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { User } from '../../interface/User';
@@ -89,7 +88,7 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
               }}
               startAdornment={
                 <div className={classes.searchIcon}>
-                  <SearchIcon />
+                  <span className="material-icons-outlined">search</span>
                 </div>
               }
             />
