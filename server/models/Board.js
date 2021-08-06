@@ -21,12 +21,10 @@ const boardSchema = new mongoose.Schema({
     default: false
   },
   
-  owner : {
-    id: {
+  userId : {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    username: String,
+      ref: 'User',
+      required : true
   },
 
   columns : [
