@@ -12,6 +12,7 @@ import BrandingLogo from './BrandingLogo';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import Board from '../../components/Board/Board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
@@ -81,6 +82,7 @@ export default function Dashboard(): JSX.Element {
           <Icon>menu</Icon>
         </Grid>
       </Grid>
+      <Board />
     </Grid>
   );
 }
