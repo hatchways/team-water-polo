@@ -16,15 +16,20 @@ const boardSchema = new mongoose.Schema({
       ref: 'User'
   },
 
-  columns :{
-    type:  [
+  columns :[
     {
 			type : mongoose.Schema.Types.ObjectId,
 			ref  : "Column"
 		}
   ],
-  default : ["In Progress", "Completed"]
-}
 });
+
+boardSchema.pre("save", function(next){
+  if(this.isNew){
+    this.columns = []
+    // what do i push here???
+    this.columns.push()
+  }
+})
 
 module.exports = Board = mongoose.model("Board", boardSchema);
