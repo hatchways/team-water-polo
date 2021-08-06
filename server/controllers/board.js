@@ -5,12 +5,10 @@ const Card = require("../models/Card");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 
-
+// Create new board
 exports.createBoard = asyncHandler(async (req, res, next)=> {
-  // how do I send user info using postman??
-  // const user = await User.findById(req.user.id);
-  // Hardcoded for now
-  const user = await User.findById('610d0a30f35d422675133930');
+  
+  const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");
@@ -33,4 +31,15 @@ exports.createBoard = asyncHandler(async (req, res, next)=> {
 
   res.status(200).json(board)
 
+})
+
+// get an existing board
+exports.loadBoard = asyncHandler(async (req, res, next) => {
+  const boardId = req.params.id
+  const board = await Board.findById(boardId).populate("columns")
+  if (!board) {
+    res.status(404);
+    throw new Error("No Board found");
+  }
+  res.status(200).json(board)
 })
