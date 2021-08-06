@@ -6,11 +6,7 @@ const boardSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  creationDate: {
-    type: Date,
-    default: Date.now
-  },
-  
+
   ownerId : {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
@@ -22,14 +18,11 @@ const boardSchema = new mongoose.Schema({
 			ref  : "Column"
 		}
   ],
-});
-
-boardSchema.pre("save", function(next){
-  if(this.isNew){
-    this.columns = []
-    // what do i push here???
-    this.columns.push()
-  }
-})
+  
+},
+{
+  timestamps: true
+}
+);
 
 module.exports = Board = mongoose.model("Board", boardSchema);

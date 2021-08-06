@@ -12,10 +12,14 @@ const cardSchema = new mongoose.Schema({
     unique: true
   },
 
-  column: {
+  columnId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Column'
-    }
+    },
+    
+},
+{
+  timestamps: true
 });
 
 module.exports = Card = mongoose.model("Card", cardSchema);

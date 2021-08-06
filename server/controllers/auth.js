@@ -91,9 +91,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 // @desc Get user data with valid token
 // @access Private
 exports.loadUser = asyncHandler(async (req, res, next) => {
-  console.log("I am running---", req.user)
   const user = await User.findById(req.user.id);
-  console.log("user---", user)
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");

@@ -6,12 +6,21 @@ const columnSchema = new mongoose.Schema({
     required: true,
   },
 
+  boardId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'board',
+    required: true
+},
+
   cards : [
     {
 			type : mongoose.Schema.Types.ObjectId,
 			ref  : "Card"
 		}
   ]
+},
+{
+  timestamps: true
 });
 
 module.exports = Column = mongoose.model("Column", columnSchema);
