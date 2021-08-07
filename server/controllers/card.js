@@ -34,17 +34,29 @@ exports.updateCard = asyncHandler(async (req, res)=> {
 
 // Move Card between columns
 exports.moveCard = asyncHandler(async (req, res)=> {
-  const {currentColumnId, newColumnId} = req.body
-  const card = await Card.findById(req.params.id)
-  card.columnId = newColumnId
-  card.save()
+  const {currentColumnId, newColumnId, sourceIndex, destinationIndex} = req.body
 
-  // updating columns
+  const card = await Card.findById(req.params.id)
   const currentColumn = await Column.findById(currentColumnId)
-  currentColumn.cards.pull(req.params.id)
-  currentColumn.save()
-  const newColumn = await Column.findById(newColumnId)
-  newColumn.cards.push(req.params.id)
-  newColumn.save()
+  // if the card moved within the same column, change card's index within the array
+  if(currentColumnId === newColumnId) {
+    currentColumn.cards.splice(sourceIndex, 1)
+    currentColumn.cards.splice(destinationIndex, 0, card._id)
+    card.save()
+  }
+
+  // if the card moved tod a different column, first update card's column, remove it from current column, 
+  // add it in the new column
+
+  if(currentColumnId !== newColumnId) {
+    card.columnId = newColumnId
+    card.save()
+    currentColumn.cards.splice(sourceIndex, 1)
+    currentColumn.save()
+    const newColumn = await Column.findById(newColumnId)
+    newColumn.cards.splice(destinationIndex, 0, card._id)
+    newColumn.save()
+    
+  }
   res.status(200).json(card)
 })
