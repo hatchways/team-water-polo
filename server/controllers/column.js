@@ -5,7 +5,7 @@ const Card = require("../models/Card");
 const asyncHandler = require("express-async-handler");
 
 
-exports.createColumn = asyncHandler(async (req, res, next)=> {
+exports.createColumn = asyncHandler(async (req, res)=> {
 
   const {boardId, title} = req.body
   const board = await Board.findById(boardId)
@@ -21,4 +21,16 @@ exports.createColumn = asyncHandler(async (req, res, next)=> {
   board.save()
   res.status(200).json(board)
 
+})
+
+exports.updateColumn = asyncHandler(async (req, res)=> {
+  const {title} = req.body
+  const column = await Column.findById(req.params.id)
+  if (!column) {
+    res.status(404);
+    throw new Error("No Column found");
+  }
+  column.title = title;
+  column.save()
+  res.status(200).json(column)
 })
