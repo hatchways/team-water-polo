@@ -13,6 +13,7 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const boardRouter = require("./routes/board");
 const columnRouter = require("./routes/column");
+const cardRouter = require("./routes/card");
 
 const { json, urlencoded } = express;
 
@@ -47,6 +48,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/boards", boardRouter);
 app.use("/columns", columnRouter);
+app.use("/cards", cardRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

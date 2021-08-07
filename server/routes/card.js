@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const protect = require('../middleware/auth');
 const {
-  createColumn
-} = require('../controllers/column');
+  createCard
+} = require('../controllers/card');
 
-router.route('/').post(protect, createColumn);
+router.route('/').post(protect, createCard);
 
 module.exports = router;

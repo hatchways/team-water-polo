@@ -6,10 +6,9 @@ const cardSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  description: {
+  tag: {
     type: String,
     required: true,
-    unique: true
   },
 
   columnId: {

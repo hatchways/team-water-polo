@@ -7,7 +7,7 @@ const {
 } = require('../controllers/board');
 
 // Have to use protect here, but protect seems buggy
-router.route('/:id').get(loadBoard);
-router.route('/').post(createBoard);
+router.route('/:id').get(protect, loadBoard);
+router.route('/').post(protect, createBoard);
 
 module.exports = router;
