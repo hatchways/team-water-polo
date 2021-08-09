@@ -13,6 +13,12 @@ exports.createBoard = asyncHandler(async (req, res, next)=> {
     res.status(401);
     throw new Error("Not authorized");
   }
+
+  if (!req.body.title) {
+    res.status(204);
+    throw new Error("Need to provide a title");
+  }
+  
   const {title} = req.body
   const board = await Board.create({
     title,
