@@ -75,11 +75,19 @@ const useStyles = makeStyles((theme) => {
           fontWeight: 'bold',
           margin: 0,
         },
+
+        '& button': {
+          padding: 0,
+        },
       },
 
       '& .material-icons': {
         fontFamily: 'Material Icons Outlined',
         lineHeight: '1em',
+      },
+
+      '& .board-selector .board-selector--option': {
+        color: 'white !important',
       },
     },
 

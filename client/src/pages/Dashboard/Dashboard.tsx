@@ -1,3 +1,4 @@
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,9 +14,19 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
+import BoardSelector from '../../components/BoardSelector';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
+  const [state, setState] = React.useState({
+    board_selector_shown: false,
+  });
+
+  const toggleBoardSelector = (event: React.MouseEvent) => {
+    setState({
+      board_selector_shown: !state.board_selector_shown,
+    });
+  };
 
   //const { loggedInUser } = useAuth();
   //const { initSocket } = useSocket();
@@ -79,10 +90,13 @@ export default function Dashboard(): JSX.Element {
           <Grid item xs={6} component="h1">
             My School Board
           </Grid>
-          <Icon>menu</Icon>
+          <IconButton onClick={toggleBoardSelector}>
+            <Icon>dashboard</Icon>
+          </IconButton>
         </Grid>
       </Grid>
       <Board />
+      <BoardSelector open={state.board_selector_shown} onClose={toggleBoardSelector} />
     </Grid>
   );
 }
