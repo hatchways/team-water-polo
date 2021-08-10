@@ -9,6 +9,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "react-beautiful-dnd": "^13.1.0"
+    "immer": "^9.0.5",
+    "react-beautiful-dnd": "^13.1.0",
+    "use-immer": "^0.6.0"
   }
 }
