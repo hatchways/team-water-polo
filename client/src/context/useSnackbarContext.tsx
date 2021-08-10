@@ -1,7 +1,6 @@
 import { useState, useContext, createContext, FunctionComponent, SyntheticEvent, useCallback } from 'react';
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 
 interface ISnackBarContext {
   updateSnackBarMessage: (message: string) => void;
@@ -43,7 +42,7 @@ export const SnackBarProvider: FunctionComponent = ({ children }): JSX.Element =
         message={message}
         action={
           <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-            <CloseIcon fontSize="small" />
+            <span className="material-icons-outlined">close</span>
           </IconButton>
         }
       />
