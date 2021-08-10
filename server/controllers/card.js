@@ -6,12 +6,7 @@ const asyncHandler = require("express-async-handler");
 
 exports.createCard = asyncHandler(async (req, res, next)=> {
 
-  if (!req.body) {
-    res.status(204);
-    throw new Error("Input missing. please fill up all the fields.");
-  }
-
-  const {columnId, boardId, name, tag} = req.body
+  const {columnId, boardId, title, tag} = req.body
 
   const column = await Column.findOne({_id: columnId, boardId: boardId})
   if (!column) {
@@ -19,7 +14,7 @@ exports.createCard = asyncHandler(async (req, res, next)=> {
     throw new Error("No Column found");
   }
   const newCard = await Card.create({
-    name,
+    title,
     tag,
     columnId: column._id
   })
@@ -31,14 +26,9 @@ exports.createCard = asyncHandler(async (req, res, next)=> {
 // Update Card title or tag
 exports.updateCard = asyncHandler(async (req, res)=> {
 
-  if (!req.body) {
-    res.status(204);
-    throw new Error("Input missing. please fill up all the fields.");
-  }
-  
-  const {name, tag} = req.body
+  const {title, tag} = req.body
   const card = await Card.findById(req.params.id)
-  card.name = name
+  card.title = title
   card.tag  = tag
   card.save()
   res.status(200).json(card)
@@ -48,10 +38,6 @@ exports.updateCard = asyncHandler(async (req, res)=> {
 exports.moveCard = asyncHandler(async (req, res)=> { 
 
   const {currentColumnId, newColumnId, sourceIndex, destinationIndex} = req.body
-  if (!req.body || !currentColumnId) {
-    res.status(204);
-    throw new Error("Missing required data.") 
-  }
   const card = await Card.findById(req.params.id)
   const currentColumn = await Column.findById(currentColumnId)
   // if the card moved within the same column, change card's index within the array

@@ -55,5 +55,5 @@ exports.updateBoard = asyncHandler(async (req, res)=> {
   }
   board.title = title;
   board.save()
-  res.status(200).json(column)
+  res.status(200).json(board)
 })
