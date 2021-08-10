@@ -30,3 +30,15 @@ exports.validateLogin = [
     next();
   }
 ];
+
+//Validation for new column and board creation
+exports.validateCreate = [
+  check("title", "Please enter a title").not().isEmpty(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    next();
+  }
+];

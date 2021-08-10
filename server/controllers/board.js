@@ -14,11 +14,6 @@ exports.createBoard = asyncHandler(async (req, res, next)=> {
     throw new Error("Not authorized");
   }
 
-  if (!req.body.title) {
-    res.status(204);
-    throw new Error("Need to provide a title");
-  }
-  
   const {title} = req.body
   const board = await Board.create({
     title,
@@ -48,4 +43,17 @@ exports.loadBoard = asyncHandler(async (req, res, next) => {
     throw new Error("No Board found");
   }
   res.status(200).json(board)
+})
+
+// update an existing board
+exports.updateBoard = asyncHandler(async (req, res)=> {
+  const {title} = req.body
+  const board = await Board.findById(req.params.id)
+  if (!board) {
+    res.status(404);
+    throw new Error("No Board found");
+  }
+  board.title = title;
+  board.save()
+  res.status(200).json(column)
 })
