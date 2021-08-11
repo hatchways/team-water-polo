@@ -9,6 +9,12 @@ const useStyles = makeStyles((theme) => {
       '& .MuiInput-underline:before': {
         borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
       },
+
+      '& .material-icons': {
+        fontFamily: 'Material Icons Outlined',
+        lineHeight: '1em',
+        color: 'currentColor',
+      },
     },
 
     branding: {
@@ -61,9 +67,13 @@ const useStyles = makeStyles((theme) => {
         },
       },
 
+      '& .main': {
+        position: 'relative',
+        color: 'white',
+      },
+
       '& .main--header': {
         backgroundColor: main_color,
-        color: 'white',
         padding: '1rem 3rem',
         boxSizing: 'border-box',
         display: 'flex',
@@ -77,17 +87,29 @@ const useStyles = makeStyles((theme) => {
         },
 
         '& button': {
+          color: 'currentColor',
           padding: 0,
         },
       },
 
-      '& .material-icons': {
-        fontFamily: 'Material Icons Outlined',
-        lineHeight: '1em',
-      },
+      '& .board-selector': {
+        position: 'absolute',
+        top: '100%',
+        right: '0',
 
-      '& .board-selector .board-selector--option': {
-        color: 'white !important',
+        '& .MuiListSubheader-root': {
+          color: 'revert',
+        },
+
+        '& .MuiDrawer-paper': {
+          position: 'revert',
+          background: main_color,
+          color: 'white',
+        },
+
+        '& .MuiListItemIcon-root': {
+          color: 'currentColor',
+        },
       },
     },
 

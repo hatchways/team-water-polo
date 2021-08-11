@@ -20,12 +20,56 @@ export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const [state, setState] = React.useState({
     board_selector_shown: false,
+    boards: [
+      {
+        id: 'school',
+        name: 'My School Board',
+      },
+      {
+        id: 'personal',
+        name: 'Personal Board',
+      },
+      {
+        id: 'shopping',
+        name: 'Shopping Lists & Purchases',
+      },
+      {
+        id: 'business',
+        name: 'Business Ideas',
+      },
+    ],
+    current_board: 'school',
   });
 
   const toggleBoardSelector = (event: React.MouseEvent) => {
-    setState({
-      board_selector_shown: !state.board_selector_shown,
+    setState((prevState) => {
+      const board_selector_shown = !prevState.board_selector_shown;
+      return Object.assign({}, prevState, { board_selector_shown });
     });
+  };
+
+  const selectBoard = (event: React.MouseEvent) => {
+    let board_button = event.target as HTMLElement;
+    let board_id = board_button.dataset.board_id;
+    while (typeof board_id === 'undefined') {
+      board_button = board_button.parentNode as HTMLElement;
+      board_id = board_button.dataset.board_id;
+    }
+
+    setState((prevState) => {
+      return Object.assign({}, prevState, {
+        current_board: board_id,
+        board_selector_shown: !prevState.board_selector_shown,
+      });
+    });
+  };
+
+  const getCurrentBoardName = () => {
+    const current_board_id = state.current_board;
+    const current_board = state.boards.filter((board) => {
+      return board.id === current_board_id;
+    })[0];
+    return current_board.name;
   };
 
   //const { loggedInUser } = useAuth();
@@ -85,18 +129,23 @@ export default function Dashboard(): JSX.Element {
           <img src={Avatar} alt="avatar" />
         </IconButton>
       </Grid>
-      <Grid container item xs={12} component="main">
+      <Grid container item xs={12} component="main" className="main">
         <Grid container item xs={12} className="main--header">
           <Grid item xs={6} component="h1">
-            My School Board
+            {getCurrentBoardName()}
           </Grid>
           <IconButton onClick={toggleBoardSelector}>
             <Icon>dashboard</Icon>
           </IconButton>
         </Grid>
+        <BoardSelector
+          open={state.board_selector_shown}
+          onClose={toggleBoardSelector}
+          boards={state.boards}
+          onBoardSelect={selectBoard}
+        />
       </Grid>
       <Board />
-      <BoardSelector open={state.board_selector_shown} onClose={toggleBoardSelector} />
     </Grid>
   );
 }
