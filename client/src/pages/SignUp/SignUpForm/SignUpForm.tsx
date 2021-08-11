@@ -5,8 +5,11 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Input } from '@material-ui/core';
 import DemoLoginButton from '../../../components/DemoLoginButton/DemoLoginButton';
+
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 interface Props {
   handleSubmit: (
@@ -14,10 +17,12 @@ interface Props {
       username,
       email,
       password,
+      file,
     }: {
       email: string;
       password: string;
       username: string;
+      file: string;
     },
     {
       setStatus,
@@ -26,19 +31,20 @@ interface Props {
       email: string;
       password: string;
       username: string;
+      file: string;
     }>,
   ) => void;
 }
 
 const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
-
   return (
     <Formik
       initialValues={{
         email: '',
         password: '',
         username: '',
+        file: '',
       }}
       validationSchema={Yup.object().shape({
         username: Yup.string().required('Username is required').max(40, 'Username is too long'),
@@ -47,10 +53,11 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
           .required('Password is required')
           .max(100, 'Password is too long')
           .min(6, 'Password too short'),
+        // file: Yup.string().required('file is required'),
       })}
       onSubmit={handleSubmit}
     >
-      {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+      {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, isSubmitting }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <TextField
             id="username"
@@ -107,6 +114,19 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             value={values.password}
             onChange={handleChange}
           />
+
+          <label htmlFor="icon-button-file">
+            <Input
+              id="icon-button-file"
+              type="file"
+              onChange={(event) => {
+                setFieldValue('file', (event.target as HTMLInputElement).files[0]);
+              }}
+            />
+            <IconButton color="primary" aria-label="upload picture" component="span">
+              <PhotoCamera />
+            </IconButton>
+          </label>
 
           <Box textAlign="center">
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>

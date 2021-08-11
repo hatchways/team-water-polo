@@ -1,5 +1,5 @@
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+// const upload = multer({ dest: 'uploads/' })
 
 const { uploadFile, getFileStream} = require('../s3')
 const fs = require('fs')
@@ -13,15 +13,22 @@ const asyncHandler = require("express-async-handler");
 exports.getImage = asyncHandler(async (req, res)=> {
   const key = req.params.key
   const readStream = getFileStream(key)
-
   readStream.pipe(res)
 })
 
 exports.uploadImage = asyncHandler(async (req, res) => {
   const file = req.file
-  console.log(file)
   const result = await uploadFile(file)
   await unlinkFile(file.path)
-  console.log(result)
   res.send({imagePath: `/images/${result.Key}`})
+});
+
+exports.uploadImages = asyncHandler(async (req, res) => {
+  const files = req.files
+  const images = await Promise.all (files.map(async file => {
+    const result = await uploadFile(file)
+    await unlinkFile(file.path)
+    return result.key
+  }))
+  res.send(images)
 });

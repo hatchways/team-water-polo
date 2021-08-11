@@ -12,7 +12,6 @@ export default function ImageForm(): JSX.Element {
     formData.append('text', text);
     formData.append('image', file);
     const result = await axios.post('/images', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-    console.log(result.data);
   }
 
   function handleChange(e: SyntheticEvent) {
@@ -32,7 +31,7 @@ export default function ImageForm(): JSX.Element {
         <input onChange={fileSelected} type="file" accept="image/*"></input>
         <button onClick={submitForm}>submit</button>
       </form>
-      <img src="/images/b4d8874c84dd3716f111c9d2f0bc8ccc" alt="" />
+      <img src={`https://water-polo-hatchways.s3.ca-central-1.amazonaws.com/5a7cd3c023db2417a00f78e54e27f566`} alt="" />
     </div>
   );
 }

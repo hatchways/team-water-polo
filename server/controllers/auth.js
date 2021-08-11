@@ -1,7 +1,11 @@
 const User = require("../models/User");
-const Board = require("../models/Board");
-const Column = require("../models/Column");
-const Card = require("../models/Card");
+// const Board = require("../models/Board");
+// const Column = require("../models/Column");
+// const Card = require("../models/Card");
+const { uploadFile, getFileStream, deleteFile} = require('../s3')
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 
@@ -10,27 +14,30 @@ const generateToken = require("../utils/generateToken");
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
-
+  
   const emailExists = await User.findOne({ email });
-
+  
   if (emailExists) {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
-
+  
   const usernameExists = await User.findOne({ username });
-
+  
   if (usernameExists) {
     res.status(400);
     throw new Error("A user with that username already exists");
   }
+  const file = req.file
+  const result = await uploadFile(file)
+  await unlinkFile(file.path)
 
   const user = await User.create({
     username,
     email,
-    password
+    password,
+    avatar: result.key
   });
-
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
@@ -45,7 +52,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          avatar: user.avatar
         }
       }
     });
@@ -77,7 +85,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          avatar: user.avatar
         }
       }
     });
@@ -91,18 +100,19 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 // @desc Get user data with valid token
 // @access Private
 exports.loadUser = asyncHandler(async (req, res, next) => {
+  console.log(req.user)
   const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");
   }
-
   res.status(200).json({
     success: {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        avatar: user.avatar
       }
     }
   });
@@ -116,3 +126,22 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
 
   res.send("You have successfully logged out");
 });
+
+exports.updateUser =  asyncHandler(async (req, res)=> {
+  const user = await User.findById(req.user.id) || '61121470db7a2227fa686676';
+  if (!user) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+  await deleteFile(user.avatar)
+  const { email, password } = req.body;
+  const file = req.file
+  const result = await uploadFile(file)
+  await unlinkFile(file.path)
+  user.email = email || user.email;
+  user.password = password || user.password;
+  user.avatar = result.key;
+  user.save()
+  res.send(user)
+
+})
