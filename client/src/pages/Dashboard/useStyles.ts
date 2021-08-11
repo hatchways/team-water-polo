@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme) => {
         position: 'absolute',
         top: '100%',
         right: '0',
+        overflow: 'hidden',
 
         '& .MuiListSubheader-root': {
           color: 'revert',
