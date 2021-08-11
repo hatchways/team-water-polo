@@ -5,7 +5,8 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import { CircularProgress, Input } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { CircularProgress, Input, Fab } from '@material-ui/core';
 import DemoLoginButton from '../../../components/DemoLoginButton/DemoLoginButton';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -97,6 +98,21 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             onChange={handleChange}
           />
           <TextField
+            className={classes.avatarContainer}
+            label={<Typography className={classes.label}>Avatar</Typography>}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              classes: { input: classes.inputs },
+            }}
+            fullWidth
+            type="file"
+            onChange={(event) => {
+              setFieldValue('file', (event.target as HTMLInputElement).files[0]);
+            }}
+          />
+          <TextField
             id="password"
             label={<Typography className={classes.label}>Password</Typography>}
             fullWidth
@@ -114,20 +130,6 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             value={values.password}
             onChange={handleChange}
           />
-
-          <label htmlFor="icon-button-file">
-            <Input
-              id="icon-button-file"
-              type="file"
-              onChange={(event) => {
-                setFieldValue('file', (event.target as HTMLInputElement).files[0]);
-              }}
-            />
-            <IconButton color="primary" aria-label="upload picture" component="span">
-              <PhotoCamera />
-            </IconButton>
-          </label>
-
           <Box textAlign="center">
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Create'}
