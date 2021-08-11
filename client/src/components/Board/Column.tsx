@@ -17,10 +17,10 @@ interface Props {
 
 export default function Column({ column, tasks, index, addTask }: Props): JSX.Element {
   const classes = useStyles(theme);
-  const [showNewTask, setShowNewTask] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const handleClick = () => {
-    setShowNewTask(!showNewTask);
+    setShowForm((showForm) => !showForm);
   };
 
   return (
@@ -44,7 +44,7 @@ export default function Column({ column, tasks, index, addTask }: Props): JSX.El
                   <Task key={task.id} task={task} index={idx} />
                 ))}
                 {provided.placeholder}
-                {showNewTask ? (
+                {showForm ? (
                   <NewTaskForm addTask={addTask} closeForm={handleClick} columnId={column.id} />
                 ) : (
                   <Button className={classes.newTaskBtn} onClick={handleClick}>

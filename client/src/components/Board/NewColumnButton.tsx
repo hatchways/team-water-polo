@@ -1,8 +1,7 @@
 import useStyles from './useStyles';
 import { Grid, IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { ReactNode } from 'react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface ComponentProps {
   children: ReactNode;
