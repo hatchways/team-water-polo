@@ -1,21 +1,24 @@
 const mongoose = require("mongoose");
 
 const cardSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
     unique: true
   },
-  description: {
+  tag: {
     type: String,
     required: true,
-    unique: true
   },
 
-  column: {
+  columnId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Column'
-    }
+    },
+    
+},
+{
+  timestamps: true
 });
 
 module.exports = Card = mongoose.model("Card", cardSchema);

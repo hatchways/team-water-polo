@@ -6,33 +6,23 @@ const boardSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  creationDate: {
-    type: Date,
-    default: Date.now
-  },
 
-  inProgress: {
-    type: Boolean,
-    default: true
-  },
-
-  isCompleted: {
-    type: Boolean,
-    default: false
-  },
-  
-  userId : {
+  ownerId : {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required : true
+      ref: 'User'
   },
 
-  columns : [
+  columns :[
     {
 			type : mongoose.Schema.Types.ObjectId,
 			ref  : "Column"
 		}
-  ]
-});
+  ],
+  
+},
+{
+  timestamps: true
+}
+);
 
 module.exports = Board = mongoose.model("Board", boardSchema);
