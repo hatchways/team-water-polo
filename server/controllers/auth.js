@@ -100,7 +100,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 // @desc Get user data with valid token
 // @access Private
 exports.loadUser = asyncHandler(async (req, res, next) => {
-  console.log(req.user)
   const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
@@ -127,21 +126,36 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
   res.send("You have successfully logged out");
 });
 
+// @desc Update user Profile
+// @access Private
 exports.updateUser =  asyncHandler(async (req, res)=> {
-  const user = await User.findById(req.user.id) || '61121470db7a2227fa686676';
+  const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");
   }
-  await deleteFile(user.avatar)
-  const { email, password } = req.body;
-  const file = req.file
-  const result = await uploadFile(file)
-  await unlinkFile(file.path)
-  user.email = email || user.email;
-  user.password = password || user.password;
-  user.avatar = result.key;
-  user.save()
-  res.send(user)
 
+  const file = req.file
+  if(file) {
+    await deleteFile(user.avatar)
+    const result = await uploadFile(file)
+    await unlinkFile(file.path)
+    user.avatar = result.key;
+  }
+  const { username, email, password } = req.body;
+  user.username = username;
+  user.email = email
+  user.password = password
+  user.save()
+
+  res.status(200).json({
+    success: {
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar
+      }
+    }
+  });
 })

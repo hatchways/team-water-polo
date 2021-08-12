@@ -2,7 +2,6 @@ import { AuthApiData } from '../../interface/AuthApiData';
 import axios from 'axios';
 
 const register = async (username: string, email: string, password: string, file: string): Promise<AuthApiData> => {
-  console.log('line 5---', file);
   const formData = new FormData();
   formData.append('username', username);
   formData.append('email', email);
