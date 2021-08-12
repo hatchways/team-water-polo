@@ -15,8 +15,6 @@ export default function Board(): JSX.Element {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [columnSide, setColumnSide] = useState('');
-
-  // use setSaving(true) to trigger 'saving...' text
   const [saving, setSaving] = useState(false);
 
   const [state, dispatch] = useImmerReducer(reducer, mockData);
