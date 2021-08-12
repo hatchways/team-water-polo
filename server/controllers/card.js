@@ -1,13 +1,25 @@
 const User = require("../models/User");
 const Board = require("../models/Board");
 const Column = require("../models/Column");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
+const { uploadFile, getFileStream, deleteFile} = require('../s3');
 const asyncHandler = require("express-async-handler");
 
 
 exports.createCard = asyncHandler(async (req, res, next)=> {
 
+  const files = req.files
+  let images = []
+  if(files.length) {
+    images = await Promise.all (files.map(async file => {
+      const result = await uploadFile(file)
+      await unlinkFile(file.path)
+      return result.key
+    }))
+  }
   const {columnId, boardId, title, tag} = req.body
-
   const column = await Column.findOne({_id: columnId, boardId: boardId})
   if (!column) {
     res.status(404);
@@ -16,20 +28,42 @@ exports.createCard = asyncHandler(async (req, res, next)=> {
   const newCard = await Card.create({
     title,
     tag,
-    columnId: column._id
+    columnId: column._id,
+    images : [...images]
   })
   column.cards.push(newCard)
   column.save()
   res.status(200).json(newCard)
 })
 
-// Update Card title or tag
 exports.updateCard = asyncHandler(async (req, res)=> {
-
-  const {title, tag} = req.body
   const card = await Card.findById(req.params.id)
+  if (!card) {
+    res.status(404);
+    throw new Error("No Card found");
+  }
+
+  const {currentImages, title, tag} = req.body
+  // currentImages is an array containing the keys of current images in the card
+  // update the images in db based on the current images in the card
+  if(currentImages.length) {
+    await deleteImagesInS3(card, currentImages)
+  }
+  
+  const files = req.files
+  let images = []
+  // if user additionally upload new image, save them as well
+  if(files.length) {
+    images = await Promise.all (files.map(async file => {
+      const result = await uploadFile(file)
+      await unlinkFile(file.path)
+      return result.key
+    }))
+  }
+
   card.title = title
   card.tag  = tag
+  card.images = [...currentImages, ...images]
   card.save()
   res.status(200).json(card)
 })
@@ -62,3 +96,4 @@ exports.moveCard = asyncHandler(async (req, res)=> {
   }
   res.status(200).json(card)
 })
+
