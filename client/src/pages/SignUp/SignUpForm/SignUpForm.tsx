@@ -5,12 +5,8 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import AddIcon from '@material-ui/icons/Add';
-import { CircularProgress, Input, Fab } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import DemoLoginButton from '../../../components/DemoLoginButton/DemoLoginButton';
-
-import IconButton from '@material-ui/core/IconButton';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 interface Props {
   handleSubmit: (

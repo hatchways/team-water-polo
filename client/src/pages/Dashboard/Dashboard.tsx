@@ -6,7 +6,6 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
-import ImageForm from '../../components/ImageForm';
 import { useEffect } from 'react';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
