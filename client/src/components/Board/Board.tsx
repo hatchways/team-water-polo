@@ -4,18 +4,22 @@ import useStyles from './useStyles';
 import { Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import Column from './Column';
 import NewColumnButton from './NewColumnButton';
-import mockData from './mockData';
 import MainModal from './Modals/MainModal';
-import { INewTask } from '../../interface/Board';
-import { useImmerReducer } from 'use-immer';
-import reducer, { setDraggedColumn, setDraggedTask, setNewColumn, setNewTask } from '../../utils/reducer';
+import { IBoardData, INewTask } from '../../interface/Board';
+import { setDraggedColumn, setDraggedTask, setNewColumn, setNewTask } from '../../utils/reducer';
+import { IMoveAction } from '../../interface/BoardActions';
 
-export default function Board(): JSX.Element {
+type dispatchTypes = INewTask | IMoveAction | string | { title: string; side: string };
+
+interface Props {
+  state: IBoardData;
+  dispatch: (arg1: dispatchTypes) => void;
+}
+
+export default function Board({ state, dispatch }: Props): JSX.Element {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [columnSide, setColumnSide] = useState('');
-
-  const [state, dispatch] = useImmerReducer(reducer, mockData);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);

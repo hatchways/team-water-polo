@@ -37,20 +37,20 @@ function App(): JSX.Element {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <BoardProvider>
-          <SnackBarProvider>
-            <Switch>
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
+        <SnackBarProvider>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <BoardProvider>
               <Route exact path="/dashboard">
                 <Dashboard />
               </Route>
-              <Route path="*">
-                <Redirect to="/dashboard" />
-              </Route>
-            </Switch>
-          </SnackBarProvider>
-        </BoardProvider>
+            </BoardProvider>
+            <Route path="*">
+              <Redirect to="/dashboard" />
+            </Route>
+          </Switch>
+        </SnackBarProvider>
       </BrowserRouter>
     </MuiThemeProvider>
   );

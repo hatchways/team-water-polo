@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
+import { useBoard } from '../../context/useBoardContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
 import { useEffect } from 'react';
@@ -13,18 +13,19 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
+import reducer from '../../utils/reducer';
+import { useImmerReducer } from 'use-immer';
+import { IBoardData } from '../../interface/Board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
 
   //const { loggedInUser } = useAuth();
-  //const { initSocket } = useSocket();
+  const { selectedBoard, setBoardId } = useBoard();
+
+  const [state, dispatch] = useImmerReducer(reducer, selectedBoard ?? ({} as IBoardData));
 
   //const history = useHistory();
-
-  // useEffect(() => {
-  //   initSocket();
-  // }, [initSocket]);
 
   // if (loggedInUser === undefined) return <CircularProgress />;
   // if (!loggedInUser) {
@@ -82,7 +83,7 @@ export default function Dashboard(): JSX.Element {
           <Icon>menu</Icon>
         </Grid>
       </Grid>
-      <Board />
+      {state && <Board state={state} dispatch={dispatch} />}
     </Grid>
   );
 }

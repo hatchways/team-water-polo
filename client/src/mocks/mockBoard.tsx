@@ -1,4 +1,4 @@
-import { IBoardData } from '../../interface/Board';
+import { IBoardData } from '../interface/Board';
 
 const mockData: IBoardData = {
   tasks: {
