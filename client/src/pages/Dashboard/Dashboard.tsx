@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
@@ -63,9 +64,11 @@ export default function Dashboard(): JSX.Element {
           <Button startIcon={<Icon>space_dashboard</Icon>} className="nav--item active" color="primary">
             Dashboard
           </Button>
-          <Button startIcon={<Icon>calendar_today</Icon>} className="nav--item">
-            Calendar
-          </Button>
+          <Link href="/calendar">
+            <Button startIcon={<Icon>calendar_today</Icon>} className="nav--item">
+              Calendar
+            </Button>
+          </Link>
         </Grid>
         <Button className="create-board" startIcon={<Icon>add</Icon>} variant="contained" color="primary">
           Create Board
