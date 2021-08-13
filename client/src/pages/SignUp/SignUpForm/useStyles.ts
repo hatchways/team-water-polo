@@ -30,6 +30,20 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#3a8dff',
     fontWeight: 'bold',
   },
+  avatarContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderBottom: 20,
+    '& input': {
+      marginLeft: '50%',
+      [theme.breakpoints.down('sm')]: {
+        marginLeft: '30%',
+      },
+    },
+  },
+  avatarBtn: {
+    paddingBottom: 0,
+  },
 }));
 
 export default useStyles;

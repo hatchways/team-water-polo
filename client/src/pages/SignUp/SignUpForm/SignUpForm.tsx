@@ -14,10 +14,12 @@ interface Props {
       username,
       email,
       password,
+      file,
     }: {
       email: string;
       password: string;
       username: string;
+      file: string;
     },
     {
       setStatus,
@@ -26,19 +28,20 @@ interface Props {
       email: string;
       password: string;
       username: string;
+      file: string;
     }>,
   ) => void;
 }
 
 const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
-
   return (
     <Formik
       initialValues={{
         email: '',
         password: '',
         username: '',
+        file: '',
       }}
       validationSchema={Yup.object().shape({
         username: Yup.string().required('Username is required').max(40, 'Username is too long'),
@@ -47,10 +50,11 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
           .required('Password is required')
           .max(100, 'Password is too long')
           .min(6, 'Password too short'),
+        // file: Yup.string().required('file is required'),
       })}
       onSubmit={handleSubmit}
     >
-      {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+      {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, isSubmitting }) => (
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <TextField
             id="username"
@@ -90,6 +94,21 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             onChange={handleChange}
           />
           <TextField
+            className={classes.avatarContainer}
+            label={<Typography className={classes.label}>Avatar</Typography>}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              classes: { input: classes.inputs },
+            }}
+            fullWidth
+            type="file"
+            onChange={(event) => {
+              setFieldValue('file', (event.target as HTMLInputElement).files[0]);
+            }}
+          />
+          <TextField
             id="password"
             label={<Typography className={classes.label}>Password</Typography>}
             fullWidth
@@ -107,7 +126,6 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             value={values.password}
             onChange={handleChange}
           />
-
           <Box textAlign="center">
             <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Create'}

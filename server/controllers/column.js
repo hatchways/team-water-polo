@@ -1,7 +1,5 @@
-const User = require("../models/User");
 const Board = require("../models/Board");
 const Column = require("../models/Column");
-const Card = require("../models/Card");
 const asyncHandler = require("express-async-handler");
 
 
@@ -9,7 +7,6 @@ exports.createColumn = asyncHandler(async (req, res)=> {
 
   const {boardId, title} = req.body
   const board = await Board.findById(boardId)
-  console.log(board)
   if (!board) {
     res.status(404);
     throw new Error("No Board found");
