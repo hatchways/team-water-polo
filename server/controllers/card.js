@@ -1,15 +1,20 @@
-const User = require("../models/User");
-const Board = require("../models/Board");
+const Card = require("../models/Card");
 const Column = require("../models/Column");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
-const { uploadFile, getFileStream, deleteFile} = require('../s3');
+const { uploadFile} = require('../s3');
+const deleteImagesInS3 = require("../utils/deleteImagesInS3");
 const asyncHandler = require("express-async-handler");
 
 
 exports.createCard = asyncHandler(async (req, res, next)=> {
-
+  const {columnId, boardId, title, tag} = req.body
+  const column = await Column.findOne({_id: columnId, boardId: boardId})
+  if (!column) {
+    res.status(404);
+    throw new Error("No Column found");
+  }
   const files = req.files
   let images = []
   if(files.length) {
@@ -18,12 +23,6 @@ exports.createCard = asyncHandler(async (req, res, next)=> {
       await unlinkFile(file.path)
       return result.key
     }))
-  }
-  const {columnId, boardId, title, tag} = req.body
-  const column = await Column.findOne({_id: columnId, boardId: boardId})
-  if (!column) {
-    res.status(404);
-    throw new Error("No Column found");
   }
   const newCard = await Card.create({
     title,
@@ -46,8 +45,8 @@ exports.updateCard = asyncHandler(async (req, res)=> {
   const {currentImages, title, tag} = req.body
   // currentImages is an array containing the keys of current images in the card
   // update the images in db based on the current images in the card
-  if(currentImages.length) {
-    await deleteImagesInS3(card, currentImages)
+  if(card.images.length && currentImages.length) {
+    await deleteImagesInS3(card.images, currentImages)
   }
   
   const files = req.files

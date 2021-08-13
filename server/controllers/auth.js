@@ -1,13 +1,11 @@
 const User = require("../models/User");
-// const Board = require("../models/Board");
-// const Column = require("../models/Column");
-// const Card = require("../models/Card");
-const { uploadFile, getFileStream, deleteFile} = require('../s3')
+const { uploadFile, deleteFile} = require('../s3')
 const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const verifyInput = require("../utils/verifyInput");
 
 // @route POST /auth/register
 // @desc Register user
@@ -15,19 +13,7 @@ const generateToken = require("../utils/generateToken");
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
   
-  const emailExists = await User.findOne({ email });
-  
-  if (emailExists) {
-    res.status(400);
-    throw new Error("A user with that email already exists");
-  }
-  
-  const usernameExists = await User.findOne({ username });
-  
-  if (usernameExists) {
-    res.status(400);
-    throw new Error("A user with that username already exists");
-  }
+  await verifyInput(req.body, res)
   const file = req.file
   const result = await uploadFile(file)
   await unlinkFile(file.path)
@@ -129,12 +115,13 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
 // @desc Update user Profile
 // @access Private
 exports.updateUser =  asyncHandler(async (req, res)=> {
+  const { username, email, password } = req.body;
   const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");
   }
-
+  await verifyInput(req.body, res)
   const file = req.file
   if(file) {
     await deleteFile(user.avatar)
@@ -142,7 +129,6 @@ exports.updateUser =  asyncHandler(async (req, res)=> {
     await unlinkFile(file.path)
     user.avatar = result.key;
   }
-  const { username, email, password } = req.body;
   user.username = username;
   user.email = email
   user.password = password

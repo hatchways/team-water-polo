@@ -9,6 +9,7 @@ exports.validateRegister = [
   ).isLength({
     min: 6
   }),
+  check("image").custom((value, {req}) => req.file).withMessage('Please upload an avatar!'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
@@ -57,7 +58,7 @@ exports.validateCard = [
 exports.validateUpdateCard = [
   check("title", "Please enter a title").notEmpty(),
   check("tag", "Please select a tag").notEmpty(),
-  // check("currentImages", "Please provide current images").isArray(),
+  check("currentImages", "Please provide current images").isArray(),
   (req, res, next) => {
     const errors = validationResult(req);
 
