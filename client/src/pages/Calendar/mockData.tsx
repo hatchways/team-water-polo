@@ -2,6 +2,7 @@ export default [
   {
     id: 0,
     title: 'All Day Event very long title',
+    tag: 'green',
     allDay: true,
     start: new Date(2021, 3, 0),
     end: new Date(2021, 3, 1),
@@ -9,6 +10,7 @@ export default [
   {
     id: 1,
     title: 'Long Event',
+    tag: 'black',
     start: new Date(2021, 3, 7),
     end: new Date(2021, 3, 10),
   },
@@ -16,6 +18,7 @@ export default [
   {
     id: 2,
     title: 'DTS STARTS',
+    tag: 'blue',
     start: new Date(2022, 2, 13, 0, 0, 0),
     end: new Date(2022, 2, 20, 0, 0, 0),
   },
@@ -23,6 +26,7 @@ export default [
   {
     id: 3,
     title: 'DTS ENDS',
+    tag: 'red',
     start: new Date(2022, 10, 6, 0, 0, 0),
     end: new Date(2022, 10, 13, 0, 0, 0),
   },
@@ -30,12 +34,14 @@ export default [
   {
     id: 4,
     title: 'Some Event',
+    tag: 'orange',
     start: new Date(2021, 3, 9, 0, 0, 0),
     end: new Date(2021, 3, 9, 0, 0, 0),
   },
   {
     id: 5,
     title: 'Conference',
+    tag: 'yellow',
     start: new Date(2021, 3, 11),
     end: new Date(2021, 3, 13),
     desc: 'Big conference for important people',
@@ -43,6 +49,7 @@ export default [
   {
     id: 6,
     title: 'Meeting',
+    tag: 'red',
     start: new Date(2021, 3, 12, 10, 30, 0, 0),
     end: new Date(2021, 3, 12, 12, 30, 0, 0),
     desc: 'Pre-meeting meeting, to prepare for the meeting',
@@ -50,6 +57,7 @@ export default [
   {
     id: 7,
     title: 'Lunch',
+    tag: 'green',
     start: new Date(2021, 3, 12, 12, 0, 0, 0),
     end: new Date(2021, 3, 12, 13, 0, 0, 0),
     desc: 'Power lunch',
@@ -57,12 +65,14 @@ export default [
   {
     id: 8,
     title: 'Meeting',
+    tag: 'purple',
     start: new Date(2021, 3, 12, 14, 0, 0, 0),
     end: new Date(2021, 3, 12, 15, 0, 0, 0),
   },
   {
     id: 9,
     title: 'Happy Hour',
+    tag: 'orange',
     start: new Date(2021, 3, 12, 17, 0, 0, 0),
     end: new Date(2021, 3, 12, 17, 30, 0, 0),
     desc: 'Most important meal of the day',
@@ -70,30 +80,35 @@ export default [
   {
     id: 10,
     title: 'Dinner',
+    tag: 'black',
     start: new Date(2021, 3, 12, 20, 0, 0, 0),
     end: new Date(2021, 3, 12, 21, 0, 0, 0),
   },
   {
     id: 11,
     title: 'Birthday Party',
+    tag: 'red',
     start: new Date(2021, 3, 13, 7, 0, 0),
     end: new Date(2021, 3, 13, 10, 30, 0),
   },
   {
     id: 12,
     title: 'Late Night Event',
+    tag: 'blue',
     start: new Date(2021, 3, 17, 19, 30, 0),
     end: new Date(2021, 3, 18, 2, 0, 0),
   },
   {
     id: 13,
     title: 'Multi-day Event',
+    tag: 'yellow',
     start: new Date(2021, 3, 20, 19, 30, 0),
     end: new Date(2021, 3, 22, 2, 0, 0),
   },
   {
     id: 14,
     title: 'Today',
+    tag: 'red',
     start: new Date(new Date().setHours(new Date().getHours() - 3)),
     end: new Date(new Date().setHours(new Date().getHours() + 3)),
   },
