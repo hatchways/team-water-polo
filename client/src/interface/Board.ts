@@ -6,7 +6,7 @@ export interface IBoardData {
 
 export interface ITask {
   [name: string]: {
-    id: string;
+    _id: string;
     content: string;
     tag: string;
     date?: Date;
@@ -15,20 +15,22 @@ export interface ITask {
 
 export interface IColumn {
   [name: string]: {
-    id: string;
+    _id: string;
     title: string;
-    taskIds: string[];
+    cards: ITask[];
+    cardOrder: string[];
   };
 }
 
 export interface IPropColumn {
-  id: string;
+  _id: string;
   title: string;
-  taskIds: string[];
+  cards: ITask[];
+  cardOrder: string[];
 }
 
 export interface IPropTask {
-  id: string;
+  _id: string;
   content: string;
   tag: string;
   date?: Date;

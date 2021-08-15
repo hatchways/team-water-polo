@@ -1,7 +1,7 @@
-import { BoardApiData } from '../../interface/BoardApiData';
+import { IBoardData } from '../../interface/Board';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-const getBoard = async (boardId: number): Promise<BoardApiData> => {
+const getBoard = async (boardId: string): Promise<IBoardData> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',

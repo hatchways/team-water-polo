@@ -6,11 +6,11 @@ export function addTaskToColumn(state: IBoardData, data: ITaskAction): void {
   const taskId = content; // for now use content as ID, later integrate back-end to return newly created contentID
 
   state.tasks[taskId] = {
-    id: taskId,
+    _id: taskId,
     content: content,
     tag: tag,
   };
-  state.columns[columnId].taskIds.push(taskId);
+  state.columns[columnId].cardOrder.push(taskId);
 }
 
 const getNewColumnOrder = (state: IBoardData, side: string, columnId: string) => {
@@ -27,9 +27,10 @@ export function addColumnToBoard(state: IBoardData, data: IColumnAction): void {
 
   state.columnOrder = getNewColumnOrder(state, side, columnId);
   state.columns[columnId] = {
-    id: columnId,
+    _id: columnId,
     title: title,
-    taskIds: [],
+    cards: [],
+    cardOrder: [],
   };
 }
 
@@ -38,15 +39,15 @@ export function moveTask(state: IBoardData, data: IMoveAction): void {
 
   if (!sourceId || !destinationId) return;
 
-  state.columns[sourceId].taskIds.splice(sourceIndex, 1);
+  state.columns[sourceId].cardOrder.splice(sourceIndex, 1);
 
   // if moving task to a different column, both destination and source columns must be updated
   if (destinationId !== sourceId) {
-    state.columns[destinationId].taskIds.splice(destinationIndex, 0, draggableId);
+    state.columns[destinationId].cardOrder.splice(destinationIndex, 0, draggableId);
     return;
   }
 
-  state.columns[sourceId].taskIds.splice(destinationIndex, 0, draggableId);
+  state.columns[sourceId].cardOrder.splice(destinationIndex, 0, draggableId);
 }
 
 export function moveColumn(state: IBoardData, data: IMoveAction): void {

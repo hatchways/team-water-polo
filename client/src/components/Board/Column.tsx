@@ -24,7 +24,7 @@ export default function Column({ column, tasks, index, addTask }: Props): JSX.El
   };
 
   return (
-    <Draggable draggableId={column.id} index={index}>
+    <Draggable draggableId={column._id} index={index}>
       {(provided) => (
         <Grid container item className={classes.columnContainer} ref={provided.innerRef} {...provided.draggableProps}>
           <Grid
@@ -37,15 +37,15 @@ export default function Column({ column, tasks, index, addTask }: Props): JSX.El
             <h2>{column.title}</h2>
             <MoreHorizIcon color="disabled" />
           </Grid>
-          <Droppable droppableId={column.id} type="TASK">
+          <Droppable droppableId={column._id} type="TASK">
             {(provided) => (
               <Grid className={classes.taskList} ref={provided.innerRef} {...provided.droppableProps}>
                 {tasks.map((task, idx) => (
-                  <Task key={task.id} task={task} index={idx} />
+                  <Task key={task._id} task={task} index={idx} />
                 ))}
                 {provided.placeholder}
                 {showForm ? (
-                  <NewTaskForm addTask={addTask} closeForm={handleClick} columnId={column.id} />
+                  <NewTaskForm addTask={addTask} closeForm={handleClick} columnId={column._id} />
                 ) : (
                   <Button className={classes.newTaskBtn} onClick={handleClick}>
                     Add a card...

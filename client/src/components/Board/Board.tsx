@@ -13,7 +13,7 @@ type dispatchTypes = INewTask | IMoveAction | string | { title: string; side: st
 
 interface Props {
   state: IBoardData;
-  dispatch: (arg1: dispatchTypes) => void;
+  dispatch: (arg: dispatchTypes) => void;
 }
 
 export default function Board({ state, dispatch }: Props): JSX.Element {
@@ -60,6 +60,8 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
     dispatch(setNewColumn(title, columnSide));
   };
 
+  console.log(state);
+
   return (
     <Grid container direction="row" className={classes.boardContainer}>
       <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'left'} />
@@ -76,8 +78,8 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
               {state &&
                 state.columnOrder.map((columnId, index) => {
                   const column = state.columns[columnId];
-                  const tasks = column.taskIds.map((taskId: string) => state.tasks[taskId]);
-                  return <Column key={column.id} column={column} tasks={tasks} index={index} addTask={addTask} />;
+                  const tasks = column.cardOrder.map((taskId: string) => state.tasks[taskId]);
+                  return <Column key={column._id} column={column} tasks={tasks} index={index} addTask={addTask} />;
                 })}
               {provided.placeholder}
             </Grid>

@@ -5,8 +5,6 @@ import useStyles from './useStyles';
 import { useAuth } from '../../context/useAuthContext';
 import { useBoard } from '../../context/useBoardContext';
 import { useHistory } from 'react-router-dom';
-import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
-import { useEffect } from 'react';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
 import Button from '@material-ui/core/Button';
@@ -20,12 +18,15 @@ import { IBoardData } from '../../interface/Board';
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
 
-  //const { loggedInUser } = useAuth();
+  const { loggedInUser } = useAuth();
   const { selectedBoard, setBoardId } = useBoard();
 
-  const [state, dispatch] = useImmerReducer(reducer, selectedBoard ?? ({} as IBoardData));
+  console.log(selectedBoard, 'selectedBoard');
+  const board = selectedBoard ?? ({} as IBoardData);
 
-  //const history = useHistory();
+  const [state, dispatch] = useImmerReducer(reducer, board);
+
+  const history = useHistory();
 
   // if (loggedInUser === undefined) return <CircularProgress />;
   // if (!loggedInUser) {
@@ -33,15 +34,6 @@ export default function Dashboard(): JSX.Element {
   //   // loading for a split seconds until history.push works
   //   return <CircularProgress />;
   // }
-
-  // return (
-  //   <Grid container component="main" className={`${classes.root} ${classes.dashboard}`}>
-  //     <CssBaseline />
-  //     <Grid item className={classes.drawerWrapper}>
-  //       <ChatSideBanner loggedInUser={loggedInUser} />
-  //     </Grid>
-  //   </Grid>
-  // );
 
   return (
     <Grid container direction="column" className={`${classes.root} ${classes.dashboard}`}>
@@ -83,7 +75,7 @@ export default function Dashboard(): JSX.Element {
           <Icon>menu</Icon>
         </Grid>
       </Grid>
-      {state && <Board state={state} dispatch={dispatch} />}
+      {selectedBoard && <Board state={board} dispatch={dispatch} />}
     </Grid>
   );
 }
