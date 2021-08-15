@@ -23,19 +23,6 @@
   color: #b9dde7;
 }
 
-.rbc-calendar {
-  background-color: #f4f6ff;
-}
-.rbc-addons-dnd .rbc-addons-dnd-resize-ew-anchor .rbc-addons-dnd-resize-ew-icon {
-  height: 0;
-}
-
-.rbc-event {
-  background-color: #fff;
-  width: 90%;
-  margin: 0 5%;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

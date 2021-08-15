@@ -7,14 +7,14 @@ const useStyles = makeStyles((theme) => ({
   popover: {
     pointerEvents: 'none',
   },
-  cardcontent: {
-    padding: 0,
+  cardContent: {
+    padding: '5px 5px',
     '&:last-child': {
       paddingBottom: 0,
     },
   },
   title: {
-    marginTop: 10,
+    marginTop: 5,
     color: 'rgba(0, 0, 0, 0.87)',
     fontWeight: 600,
   },
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   tag: {
     display: 'block',
     minHeight: 7,
-    paddingTop: 5,
     width: 50,
     borderRadius: '5px',
   },
