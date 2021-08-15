@@ -7,7 +7,6 @@ export default function Tag({ event }: any): JSX.Element {
     <Card>
       <CardContent className={classes.cardContent}>
         <Box className={classes.tag} style={{ backgroundColor: event.tag ?? 'white' }}></Box>
-        {/* <span style={{ backgroundColor: event.tag }} className={classes.tag}></span> */}
         <Typography noWrap className={classes.title}>
           {event.title}
         </Typography>
