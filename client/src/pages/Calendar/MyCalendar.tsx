@@ -4,6 +4,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Tag from './Tag';
+import CardModal from './CardModal';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import './MyCalendar.css';
@@ -22,25 +23,20 @@ export default function MyCalendar(): JSX.Element {
   const [state, setState] = useState({
     events: events,
   });
-
-  function moveEvent({ event, start }: any): void {
+  console.log('line 29---', state.events);
+  function moveEvent({ event, start }: any) {
     const { events } = state;
-
     const idx = events.indexOf(event);
     const updatedEvent = { ...event, start };
-
     const nextEvents = [...events];
     nextEvents.splice(idx, 1, updatedEvent);
-
     setState({
       events: nextEvents,
     });
   }
-  const msg = {
-    showMore: (total: any) => `+${total} ...`,
-  };
+
   const handleOpen = (event: any) => {
-    setModalContent(event.title);
+    setModalContent(event);
     setShowModal(true);
   };
 
@@ -49,7 +45,17 @@ export default function MyCalendar(): JSX.Element {
     setShowModal(false);
   };
 
-  const open = Boolean(anchorEl);
+  function updateEvent(property: string, value: string) {
+    const { events } = state;
+    const idx = events.indexOf(modalContent);
+    const updatedEvent = { ...modalContent };
+    updatedEvent[property] = value;
+    const nextEvents = [...events];
+    nextEvents.splice(idx, 1, updatedEvent);
+    setState({
+      events: nextEvents,
+    });
+  }
 
   return (
     <div>
@@ -65,16 +71,12 @@ export default function MyCalendar(): JSX.Element {
         popup
         // elementProps={{ onClick: (e) => console.log('line 89---', e.target) }}
         onSelectEvent={handleOpen}
-        messages={msg}
         views={{ month: true }}
         endAccessor="start"
         defaultDate={new Date(2021, 3, 12)}
         style={{ height: 800 }}
       />
 
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
       <Modal
         open={showModal}
         className={classes.modal}
@@ -82,9 +84,8 @@ export default function MyCalendar(): JSX.Element {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <div className={classes.paper}>
-          <h2 id="spring-modal-title">Hi</h2>
-          <p id="spring-modal-description">react-spring animates me.</p>
+        <div className={classes.modalContent}>
+          {showModal ? <CardModal content={modalContent} methods={{ handleClose, updateEvent }} /> : null}
         </div>
       </Modal>
     </div>
