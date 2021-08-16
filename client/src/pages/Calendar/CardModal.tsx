@@ -1,45 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { theme } from '../../themes/theme';
 import useStyles from './useStyles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import { PermMediaOutlined, DescriptionOutlined } from '@material-ui/icons';
-
-import IconButton from '@material-ui/core/IconButton';
+import { Box, Card, CardContent, Button, Typography, TextField, IconButton } from '@material-ui/core';
+import { PermMediaOutlined, DescriptionOutlined, ControlPoint } from '@material-ui/icons';
+import { IPropContent, IPropMethods } from '../../interface/Calendar';
+import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
-import Box from '@material-ui/core/Box';
 
-export default function CardModal({ content, methods }: any): JSX.Element {
+interface Props {
+  content: IPropContent;
+  methods: IPropMethods;
+}
+
+export default function CardModal({ content, methods }: Props): JSX.Element {
+  const classes = useStyles(theme);
   const [title, setTitle] = useState(content.title);
   const [description, setDescription] = useState(content.description);
   const [showButton, setShowButton] = useState(false);
-  const classes = useStyles(theme);
-  const handleChange = (event: any) => {
-    setDescription(event.target.value);
+
+  const handleChange = (e: React.ChangeEvent) => {
+    setDescription((e.target as HTMLInputElement).value);
   };
 
-  useEffect(() => {
-    setTitle(content.title);
-  }, [content.title]);
-
-  const handleTitleChange = (event: any) => {
-    const value = event.target.value;
+  const handleTitleChange = (e: React.ChangeEvent) => {
+    const value = (e.target as HTMLInputElement).value;
     setTitle(value);
   };
-  const handleFocus = (event: any) => {
+
+  const handleFocus = (): void => {
     setShowButton(true);
-    console.log('focused');
   };
 
-  const saveDescription = () => {
+  const saveDescription = (): void => {
     setShowButton(false);
     methods.updateEvent('description', description);
   };
+  const cancelSave = (): void => {
+    setShowButton(false);
+    setDescription(content.description);
+  };
+
   return (
     <Card className={classes.paper} variant="outlined">
       <CardContent>
@@ -62,7 +62,7 @@ export default function CardModal({ content, methods }: any): JSX.Element {
           />
         </Box>
         <Typography className={classes.pos} color="textSecondary">
-          In column <span>Completed</span>
+          In list<span>Completed</span>
         </Typography>
         <Box className={classes.header}>
           <DescriptionOutlined color="action" />
@@ -74,7 +74,6 @@ export default function CardModal({ content, methods }: any): JSX.Element {
           <TextField
             id="outlined-basic"
             onFocus={handleFocus}
-            onBlur={saveDescription}
             multiline
             placeholder="Add a more detailed description"
             variant="outlined"
@@ -82,9 +81,14 @@ export default function CardModal({ content, methods }: any): JSX.Element {
             onChange={handleChange}
           />
           {showButton ? (
-            <Button className={classes.button} variant="contained" color="primary" onClick={saveDescription}>
-              Save
-            </Button>
+            <Box className={classes.buttonContainer}>
+              <Button className={classes.button} variant="contained" color="primary" onClick={saveDescription}>
+                Save
+              </Button>
+              <IconButton color="default" aria-label="close" component="span" onClick={cancelSave}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
           ) : null}
           <IconButton className={classes.closeButton} onClick={methods.handleClose}>
             <CloseIcon />
@@ -95,26 +99,33 @@ export default function CardModal({ content, methods }: any): JSX.Element {
           <Typography variant="h5" component="h3">
             Media
           </Typography>
+          <Box>
+            <input accept="image/*" id="upload-photo" type="file" multiple hidden />
+            <label htmlFor="upload-photo">
+              <Button component="span">
+                <ControlPoint color="action" />
+              </Button>
+            </label>
+          </Box>
         </Box>
 
-        <div className={classes.imageContainer}>
-          <CardMedia
-            component="img"
-            className={classes.media}
-            image={`https://water-polo-hatchways.s3.ca-central-1.amazonaws.com/068d7488e6ece71c8a2feefaefdd1412`}
-            title="Contemplative Reptile"
-          />
-          <CardMedia
-            component="img"
-            className={classes.media}
-            image={`https://water-polo-hatchways.s3.ca-central-1.amazonaws.com/068d7488e6ece71c8a2feefaefdd1412`}
-            title="Contemplative Reptile"
-          />
-        </div>
+        <Box className={classes.images}>
+          {content.images.map((image: string, index: number) => {
+            return (
+              <div className={classes.imageContainer} key={index}>
+                <img
+                  className={classes.image}
+                  src={`https://water-polo-hatchways.s3.ca-central-1.amazonaws.com/${image}`}
+                  alt={content.title}
+                />
+                <IconButton aria-label="delete" className={classes.delete}>
+                  <DeleteIcon fontSize="medium" />
+                </IconButton>
+              </div>
+            );
+          })}
+        </Box>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }

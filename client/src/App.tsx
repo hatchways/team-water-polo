@@ -41,13 +41,13 @@ function App(): JSX.Element {
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/calendar" component={MyCalendar} />
+            {/* <Route exact path="/calendar" component={MyCalendar} /> */}
             <Route exact path="/dashboard">
               <Dashboard />
             </Route>
-            <Route path="*">
+            {/* <Route path="*">
               <Redirect to="/dashboard" />
-            </Route>
+            </Route> */}
           </Switch>
         </SnackBarProvider>
       </BrowserRouter>
