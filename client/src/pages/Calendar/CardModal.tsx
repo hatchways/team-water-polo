@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { theme } from '../../themes/theme';
 import useStyles from './useStyles';
+import ModalForm from './ModalForm';
 import { Box, Card, CardContent, Button, Typography, TextField, IconButton } from '@material-ui/core';
 import { PermMediaOutlined, DescriptionOutlined, ControlPoint } from '@material-ui/icons';
 import { IPropContent, IPropMethods } from '../../interface/Calendar';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CloseIcon from '@material-ui/icons/Close';
 
 interface Props {
   content: IPropContent;
@@ -15,29 +15,10 @@ interface Props {
 export default function CardModal({ content, methods }: Props): JSX.Element {
   const classes = useStyles(theme);
   const [title, setTitle] = useState(content.title);
-  const [description, setDescription] = useState(content.description);
-  const [showButton, setShowButton] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent) => {
-    setDescription((e.target as HTMLInputElement).value);
-  };
 
   const handleTitleChange = (e: React.ChangeEvent) => {
     const value = (e.target as HTMLInputElement).value;
     setTitle(value);
-  };
-
-  const handleFocus = (): void => {
-    setShowButton(true);
-  };
-
-  const saveDescription = (): void => {
-    setShowButton(false);
-    methods.updateEvent('description', description);
-  };
-  const cancelSave = (): void => {
-    setShowButton(false);
-    setDescription(content.description);
   };
 
   return (
@@ -70,30 +51,7 @@ export default function CardModal({ content, methods }: Props): JSX.Element {
             Description
           </Typography>
         </Box>
-        <form className={classes.form} noValidate autoComplete="off">
-          <TextField
-            id="outlined-basic"
-            onFocus={handleFocus}
-            multiline
-            placeholder="Add a more detailed description"
-            variant="outlined"
-            value={description}
-            onChange={handleChange}
-          />
-          {showButton ? (
-            <Box className={classes.buttonContainer}>
-              <Button className={classes.button} variant="contained" color="primary" onClick={saveDescription}>
-                Save
-              </Button>
-              <IconButton color="default" aria-label="close" component="span" onClick={cancelSave}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          ) : null}
-          <IconButton className={classes.closeButton} onClick={methods.handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </form>
+        <ModalForm cardDesc={content.description} methods={methods} />
         <Box className={classes.header}>
           <PermMediaOutlined color="action" />
           <Typography variant="h5" component="h3">
