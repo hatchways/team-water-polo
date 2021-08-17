@@ -6,6 +6,7 @@ import { Box, Card, CardContent, Button, Typography, TextField, IconButton } fro
 import { PermMediaOutlined, DescriptionOutlined, ControlPoint } from '@material-ui/icons';
 import { IPropContent, IPropMethods } from '../../interface/Calendar';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface Props {
   content: IPropContent;
@@ -41,6 +42,9 @@ export default function CardModal({ content, methods }: Props): JSX.Element {
             }}
             variant="outlined"
           />
+          <IconButton className={classes.closeButton} onClick={methods.handleClose}>
+            <CloseIcon />
+          </IconButton>
         </Box>
         <Typography className={classes.pos} color="textSecondary">
           In list<span>Completed</span>
