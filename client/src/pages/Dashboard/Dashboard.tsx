@@ -11,22 +11,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
-import reducer from '../../utils/reducer';
-import { useImmerReducer } from 'use-immer';
-import { IBoardData } from '../../interface/Board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
 
-  const { loggedInUser } = useAuth();
-  const { selectedBoard, setBoardId } = useBoard();
+  // const { loggedInUser } = useAuth();
+  const { state, dispatch, setBoardIndex } = useBoard();
 
-  console.log(selectedBoard, 'selectedBoard');
-  const board = selectedBoard ?? ({} as IBoardData);
-
-  const [state, dispatch] = useImmerReducer(reducer, board);
-
-  const history = useHistory();
+  // const history = useHistory();
 
   // if (loggedInUser === undefined) return <CircularProgress />;
   // if (!loggedInUser) {
@@ -70,12 +62,12 @@ export default function Dashboard(): JSX.Element {
       <Grid container item xs={12} component="main">
         <Grid container item xs={12} className="main--header">
           <Grid item xs={6} component="h1">
-            My School Board
+            {state && state.title}
           </Grid>
           <Icon>menu</Icon>
         </Grid>
       </Grid>
-      {selectedBoard && <Board state={board} dispatch={dispatch} />}
+      {state && <Board state={state} dispatch={dispatch} />}
     </Grid>
   );
 }

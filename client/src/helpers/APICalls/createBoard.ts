@@ -1,12 +1,11 @@
 import { BoardApiData } from '../../interface/BoardApiData';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-// for testing, delete
-const createBoard = async (title: string): Promise<BoardApiData> => {
+const createBoard = async (title: string, userId: string): Promise<BoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: title }),
+    body: JSON.stringify({ title, userId }),
     credentials: 'include',
   };
   return await fetch(`/boards`, fetchOptions)

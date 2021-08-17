@@ -5,51 +5,30 @@ import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/useAuthContext';
-import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import { BoardProvider } from './context/useBoardContext';
 
 import './App.css';
 
 function App(): JSX.Element {
-  // return (
-  //   <MuiThemeProvider theme={theme}>
-  //     <BrowserRouter>
-  //       <SnackBarProvider>
-  //         <AuthProvider>
-  //           <SocketProvider>
-  //             <Switch>
-  //               <Route exact path="/login" component={Login} />
-  //               <Route exact path="/signup" component={Signup} />
-  //               <Route exact path="/dashboard">
-  //                 <Dashboard />
-  //               </Route>
-  //               <Route path="*">
-  //                 <Redirect to="/login" />
-  //               </Route>
-  //             </Switch>
-  //           </SocketProvider>
-  //         </AuthProvider>
-  //       </SnackBarProvider>
-  //     </BrowserRouter>
-  //   </MuiThemeProvider>
-  // );
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         <SnackBarProvider>
-          <Switch>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <BoardProvider>
-              <Route exact path="/dashboard">
-                <Dashboard />
+          <AuthProvider>
+            <Switch>
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={Signup} />
+              <BoardProvider>
+                <Route exact path="/dashboard">
+                  <Dashboard />
+                </Route>
+              </BoardProvider>
+              <Route path="*">
+                <Redirect to="/login" />
               </Route>
-            </BoardProvider>
-            <Route path="*">
-              <Redirect to="/dashboard" />
-            </Route>
-          </Switch>
+            </Switch>
+          </AuthProvider>
         </SnackBarProvider>
       </BrowserRouter>
     </MuiThemeProvider>

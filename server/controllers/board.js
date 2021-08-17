@@ -7,20 +7,20 @@ const generateToken = require("../utils/generateToken");
 
 // Create new board
 exports.createBoard = asyncHandler(async (req, res, next) => {
-  // for testing
-  const userId = "6101722718952e53d0064181";
+  const { title, userId } = req.body;
+
   const user = await User.findById(userId);
-  // const user = await User.findById(req.user.id);
+
   if (!user) {
     res.status(401);
     throw new Error("Not authorized");
   }
 
-  const { title } = req.body;
   const board = await Board.create({
-    title,
+    title: title,
     ownerId: user._id,
   });
+
   const inProgressColumn = await Column.create({
     title: "In Progress",
     boardId: board._id,
@@ -29,14 +29,18 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
     title: "Completed",
     boardId: board._id,
   });
+
   board.columns.push(inProgressColumn, completedColumn);
   board.columnOrder = board.columns.map((column) => column.id);
+  user.boards.push(board);
   board.save();
+  user.save();
 
   res.status(200).json(board);
 });
 
 // get an existing board
+// this might not be needed since all boards are loaded at login
 exports.loadBoard = asyncHandler(async (req, res, next) => {
   const boardId = req.params.id;
   const data = await Board.findById(boardId).populate("columns");
@@ -46,35 +50,30 @@ exports.loadBoard = asyncHandler(async (req, res, next) => {
     throw new Error("No Board found");
   }
 
-  function mapToBoard(data) {
-    const tasks = [];
-    const columns = {};
-    for (column of data.columns) {
-      tasks.push(...column.cards);
-      columns[column.id] = column;
-    }
-
-    return {
-      tasks: tasks,
-      columns: columns,
-      columnOrder: data.columnOrder,
-    };
-  }
-
-  const board = mapToBoard(data);
-
   res.status(200).json(board);
 });
 
 // update an existing board
 exports.updateBoard = asyncHandler(async (req, res) => {
-  const { title } = req.body;
+  const { type } = req.body;
   const board = await Board.findById(req.params.id);
+
   if (!board) {
     res.status(404);
     throw new Error("No Board found");
   }
-  board.title = title;
+
+  switch (type) {
+    case "COLUMN":
+      board.columnOrder = req.body.columnOrder;
+      break;
+    case "TITLE":
+      board.title = req.body.title;
+      break;
+    default:
+      break;
+  }
+
   board.save();
-  res.status(200).json(board);
+  res.status(204);
 });

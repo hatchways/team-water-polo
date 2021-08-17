@@ -1,34 +1,34 @@
-import { addTaskToColumn, addColumnToBoard, moveColumn, moveTask } from './reducerFunctions';
-import { IColumnAction, ITaskAction, IMoveAction } from '../interface/BoardActions';
-import { IBoardData, INewTask } from '../interface/Board';
+import { addCardToColumn, addColumnToBoard, moveColumn, moveCard } from './reducerFunctions';
+import { IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
+import { IBoardData } from '../interface/Board';
 
 // Actions
 
-const ADD_TASK = 'ADD_TASK';
+const ADD_CARD = 'ADD_CARD';
 const ADD_COLUMN = 'ADD_COLUMN';
-const MOVE_TASK = 'MOVE_TASK';
+const MOVE_CARD = 'MOVE_CARD';
 const MOVE_COLUMN = 'MOVE_COLUMN';
 
 // Action creators
 
-export const setNewTask = (task: INewTask): ITaskAction => {
+export const setNewCard = (card: ICardAction): ICardAction => {
   return {
-    type: ADD_TASK,
-    ...task,
+    type: ADD_CARD,
+    ...card,
   };
 };
 
-export const setNewColumn = (title: string, side: string): IColumnAction => {
+export const setNewColumn = (column: IColumnAction, side: string): IColumnAction => {
   return {
     type: ADD_COLUMN,
-    title: title,
+    ...column,
     side: side,
   };
 };
 
-export const setDraggedTask = (data: IMoveAction): IMoveAction => {
+export const setDraggedCard = (data: IMoveAction): IMoveAction => {
   return {
-    type: MOVE_TASK,
+    type: MOVE_CARD,
     ...data,
   };
 };
@@ -42,16 +42,16 @@ export const setDraggedColumn = (data: IMoveAction): IMoveAction => {
 
 // Reducer
 
-type IActions = IColumnAction | ITaskAction | IMoveAction;
+type IActions = IColumnAction | ICardAction | IMoveAction;
 
-export default function reducer(draft: IBoardData, action: IActions): void {
+export default function reducer(draft: IBoardData, action: IActions): void | IBoardData {
   switch (action.type) {
-    case ADD_TASK:
-      return addTaskToColumn(draft, action);
+    case ADD_CARD:
+      return addCardToColumn(draft, action);
     case ADD_COLUMN:
       return addColumnToBoard(draft, action);
-    case MOVE_TASK:
-      return moveTask(draft, action);
+    case MOVE_CARD:
+      return moveCard(draft, action);
     case MOVE_COLUMN:
       return moveColumn(draft, action);
   }

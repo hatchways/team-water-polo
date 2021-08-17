@@ -5,21 +5,27 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   registerDate: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
+  boards: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Board",
+    },
+  ],
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     blockSize: 'fit-content',
   },
-  taskList: {
+  cardList: {
     blockSize: 'fit-content',
   },
   columnFooter: {
     padding: '3%',
     marginBottom: '5%',
   },
-  newTaskBtn: {
+  newCardButton: {
     color: '#b2b2b2',
     marginLeft: '3%',
   },
@@ -49,24 +49,24 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 2px',
     padding: 0,
   },
-  taskContainer: {
+  cardContainer: {
     width: '94%',
     margin: '5px auto',
     minHeight: '85px',
     maxHeight: '100px',
     borderRadius: 10,
   },
-  newTaskContainer: {
+  newCardContainer: {
     width: '94%',
     margin: '5px auto',
     height: '110px',
     border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: 10,
   },
-  taskContent: {
+  cardContent: {
     marginTop: '8px',
   },
-  draggingTask: {
+  draggingCard: {
     transform: 'rotate(-5deg)',
     transition: 'transform 300ms ease',
   },
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     width: '5%',
   },
-  addColumnBtn: {
+  addColumnButton: {
     height: '100%',
     width: '100%',
     borderRadius: '0',

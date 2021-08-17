@@ -5,11 +5,12 @@ import { Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import Column from './Column';
 import NewColumnButton from './NewColumnButton';
 import MainModal from './Modals/MainModal';
-import { IBoardData, INewTask } from '../../interface/Board';
-import { setDraggedColumn, setDraggedTask, setNewColumn, setNewTask } from '../../utils/reducer';
+import { IBoardData, INewCard } from '../../interface/Board';
+import { setDraggedColumn, setDraggedCard, setNewColumn, setNewCard } from '../../utils/reducer';
+import { addCardToDb, addColumnToDb } from '../../utils/thunk';
 import { IMoveAction } from '../../interface/BoardActions';
 
-type dispatchTypes = INewTask | IMoveAction | string | { title: string; side: string };
+type dispatchTypes = INewCard | IMoveAction | string | { title: string; side: string };
 
 interface Props {
   state: IBoardData;
@@ -43,24 +44,30 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
       return;
     }
 
-    const taskData = {
+    const cardData = {
       ...columnData,
       sourceId: source.droppableId,
       destinationId: destination.droppableId,
     };
 
-    dispatch(setDraggedTask(taskData));
+    dispatch(setDraggedCard(cardData));
   };
 
-  const addTask = (newTask: INewTask) => {
-    dispatch(setNewTask(newTask));
+  const addCard = async (newCard: INewCard) => {
+    await addCardToDb(newCard, state.id)
+      .then((card) => {
+        dispatch(setNewCard(card));
+      })
+      .catch((err) => console.log(err));
   };
 
-  const addColumn = (title: string) => {
-    dispatch(setNewColumn(title, columnSide));
+  const addColumn = async (title: string) => {
+    await addColumnToDb(title, columnSide, state.id)
+      .then((column) => {
+        dispatch(setNewColumn(column, columnSide));
+      })
+      .catch((err) => console.log(err));
   };
-
-  console.log(state);
 
   return (
     <Grid container direction="row" className={classes.boardContainer}>
@@ -75,11 +82,11 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {state &&
+              {state.id &&
                 state.columnOrder.map((columnId, index) => {
                   const column = state.columns[columnId];
-                  const tasks = column.cardOrder.map((taskId: string) => state.tasks[taskId]);
-                  return <Column key={column._id} column={column} tasks={tasks} index={index} addTask={addTask} />;
+                  const cards = column.cardOrder.map((cardId: string) => state.cards[cardId]);
+                  return <Column key={column._id} column={column} cards={cards} index={index} addCard={addCard} />;
                 })}
               {provided.placeholder}
             </Grid>

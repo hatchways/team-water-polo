@@ -1,7 +1,9 @@
 import { IBoardData } from '../interface/Board';
 
 const mockData: IBoardData = {
-  tasks: {
+  id: 'schoolboard',
+  title: 'My school board',
+  cards: {
     'task-1': { _id: 'task-1', content: 'Essay on the environment', tag: '#5acd76' },
     'task-2': { _id: 'task-2', content: 'Midterm exam', date: new Date(2021, 3, 10), tag: '#ff5d48' },
     'task-3': { _id: 'task-3', content: 'Practice exam', tag: '#ff5d48' },

@@ -1,44 +1,49 @@
-import { useState, useContext, createContext, FunctionComponent, useCallback } from 'react';
-import { IBoardData } from '../interface/Board';
-import { useEffect } from 'react';
-import getBoard from '../helpers/APICalls/getBoard';
-import { BoardApiData, BoardApiDataSuccess } from '../interface/BoardApiData';
-import mockData from '../mocks/mockBoard';
+import { useState, useContext, createContext, FunctionComponent } from 'react';
+import { IBoardData, INewCard } from '../interface/Board';
+import { IMoveAction } from '../interface/BoardActions';
+import reducer from '../utils/reducer';
+import { useImmerReducer } from 'use-immer';
+import { useAuth } from './useAuthContext';
 import createBoard from '../helpers/APICalls/createBoard';
+import { useEffect } from 'react';
 
 interface IBoardContext {
-  selectedBoard: IBoardData | undefined;
-  setBoardId: (id: string) => void;
+  state: IBoardData | undefined;
+  dispatch: (arg: INewCard | IMoveAction | string | { title: string; side: string }) => void;
+  setBoardIndex: (arg: number) => void;
 }
 
 export const BoardContext = createContext<IBoardContext>({
-  selectedBoard: undefined,
-  setBoardId: () => null,
+  state: undefined,
+  dispatch: () => null,
+  setBoardIndex: () => null,
 });
 
 export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [selectedBoard, setSelectedBoard] = useState<IBoardData>();
-  const [boardId, setBoardId] = useState<string>('61173b890df1143ce405abcf');
-
-  const updateBoard = useCallback((board: IBoardData) => {
-    setSelectedBoard(board);
-  }, []);
+  const { loggedInUser } = useAuth();
+  const [boardIndex, setBoardIndex] = useState(0);
+  const [selectedBoard, setSelectedBoard] = useState<IBoardData>(
+    loggedInUser?.boards[boardIndex] ?? ({} as IBoardData),
+  );
 
   useEffect(() => {
-    if (!boardId) {
-      createBoard('New board');
-    } else {
-      getBoard(boardId).then((board: IBoardData) => {
-        if (board) {
-          updateBoard(board);
-        } else {
-          console.log('Failed to retrieve board data from server');
+    const checkForBoard = async () => {
+      if (loggedInUser && !loggedInUser.boards.length) {
+        // if the user does not have any boards yet, create one
+        const newBoard = await createBoard('New board', loggedInUser.id);
+        if (newBoard.success) {
+          loggedInUser.boards.push(newBoard.success.board);
         }
-      });
-    }
-  }, [boardId, updateBoard]);
+      } else if (loggedInUser?.boards.length) {
+        setSelectedBoard(loggedInUser.boards[boardIndex]);
+      }
+    };
+    checkForBoard();
+  }, [loggedInUser, boardIndex]);
 
-  return <BoardContext.Provider value={{ selectedBoard, setBoardId }}>{children}</BoardContext.Provider>;
+  const [state, dispatch] = useImmerReducer(reducer, selectedBoard);
+
+  return <BoardContext.Provider value={{ state, dispatch, setBoardIndex }}>{children}</BoardContext.Provider>;
 };
 
 export function useBoard(): IBoardContext {

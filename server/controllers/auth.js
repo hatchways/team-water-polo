@@ -28,7 +28,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create({
     username,
     email,
-    password
+    password,
   });
 
   if (user) {
@@ -37,7 +37,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: secondsInWeek * 1000
+      maxAge: secondsInWeek * 1000,
     });
 
     res.status(201).json({
@@ -45,9 +45,10 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
-        }
-      }
+          email: user.email,
+          boards: user.boards,
+        },
+      },
     });
   } else {
     res.status(400);
@@ -61,15 +62,44 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate({
+    path: "boards",
+    populate: {
+      path: "columns",
+      populate: {
+        path: "cards",
+      },
+    },
+  });
 
   if (user && (await user.matchPassword(password))) {
+    const boards = [];
+
+    function mapToBoard(data) {
+      const cards = {};
+      const columns = {};
+      for (const column of data.columns) {
+        column.cards.forEach((card) => (cards[card._id] = card));
+        columns[column.id] = column;
+      }
+
+      return {
+        id: data._id,
+        title: data.title,
+        cards: cards,
+        columns: columns,
+        columnOrder: data.columnOrder,
+      };
+    }
+
+    user.boards.forEach((board) => boards.push(mapToBoard(board)));
+
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
 
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: secondsInWeek * 1000
+      maxAge: secondsInWeek * 1000,
     });
 
     res.status(200).json({
@@ -77,9 +107,10 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
-        }
-      }
+          email: user.email,
+          boards: boards,
+        },
+      },
     });
   } else {
     res.status(401);
@@ -102,9 +133,9 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
-      }
-    }
+        email: user.email,
+      },
+    },
   });
 });
 

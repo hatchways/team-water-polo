@@ -1,16 +1,11 @@
 import { IBoardData } from '../interface/Board';
-import { IColumnAction, ITaskAction, IMoveAction } from '../interface/BoardActions';
+import { IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
+import { updateCardOrder, updateColumnOrder } from '../helpers/APICalls/updateBoard';
 
-export function addTaskToColumn(state: IBoardData, data: ITaskAction): void {
-  const { content, tag, columnId } = data;
-  const taskId = content; // for now use content as ID, later integrate back-end to return newly created contentID
-
-  state.tasks[taskId] = {
-    _id: taskId,
-    content: content,
-    tag: tag,
-  };
-  state.columns[columnId].cardOrder.push(taskId);
+export function addCardToColumn(state: IBoardData, data: ICardAction): void {
+  const { _id, columnId } = data;
+  state.cards[_id] = data;
+  state.columns[columnId].cardOrder.push(_id);
 }
 
 const getNewColumnOrder = (state: IBoardData, side: string, columnId: string) => {
@@ -22,19 +17,13 @@ const getNewColumnOrder = (state: IBoardData, side: string, columnId: string) =>
 };
 
 export function addColumnToBoard(state: IBoardData, data: IColumnAction): void {
-  const { title, side } = data;
-  const columnId = title; // for now use title as ID, later integrate back-end
+  const { _id, side } = data;
 
-  state.columnOrder = getNewColumnOrder(state, side, columnId);
-  state.columns[columnId] = {
-    _id: columnId,
-    title: title,
-    cards: [],
-    cardOrder: [],
-  };
+  state.columnOrder = getNewColumnOrder(state, side, _id);
+  state.columns[_id] = data;
 }
 
-export function moveTask(state: IBoardData, data: IMoveAction): void {
+export function moveCard(state: IBoardData, data: IMoveAction): void {
   const { sourceIndex, destinationIndex, sourceId, destinationId, draggableId } = data;
 
   if (!sourceId || !destinationId) return;
@@ -44,14 +33,15 @@ export function moveTask(state: IBoardData, data: IMoveAction): void {
   // if moving task to a different column, both destination and source columns must be updated
   if (destinationId !== sourceId) {
     state.columns[destinationId].cardOrder.splice(destinationIndex, 0, draggableId);
-    return;
+  } else {
+    state.columns[sourceId].cardOrder.splice(destinationIndex, 0, draggableId);
   }
-
-  state.columns[sourceId].cardOrder.splice(destinationIndex, 0, draggableId);
+  updateCardOrder(data);
 }
 
 export function moveColumn(state: IBoardData, data: IMoveAction): void {
   const { sourceIndex, destinationIndex, draggableId } = data;
   state.columnOrder.splice(sourceIndex, 1);
   state.columnOrder.splice(destinationIndex, 0, draggableId);
+  updateColumnOrder(state.columnOrder, state.id);
 }

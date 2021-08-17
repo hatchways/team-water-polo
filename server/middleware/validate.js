@@ -7,7 +7,7 @@ exports.validateRegister = [
     "password",
     "Please enter a password with 6 or more characters"
   ).isLength({
-    min: 6
+    min: 6,
   }),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -16,7 +16,7 @@ exports.validateRegister = [
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     next();
-  }
+  },
 ];
 
 exports.validateLogin = [
@@ -28,7 +28,7 @@ exports.validateLogin = [
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     next();
-  }
+  },
 ];
 
 //Validation for new column and board creation
@@ -40,12 +40,12 @@ exports.validateCreate = [
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     next();
-  }
+  },
 ];
 
 // validation for creating and updating card
 exports.validateCard = [
-  check("title", "Please enter a title").notEmpty(),
+  check("content", "Please enter a title").notEmpty(),
   check("tag", "Please select a tag").notEmpty(),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -53,5 +53,5 @@ exports.validateCard = [
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     next();
-  }
+  },
 ];
