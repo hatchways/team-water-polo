@@ -15,8 +15,8 @@ import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
-import MyCalendar from '../Calendar/MyCalendar';
 import BoardSelector from '../../components/BoardSelector';
+import MyCalendar from '../Calendar/MyCalendar';
 
 export default function Dashboard(): JSX.Element {
   const [activeTab, setActiveTab] = useState('board');
@@ -74,6 +74,7 @@ export default function Dashboard(): JSX.Element {
     })[0];
     return current_board.name;
   };
+
   //const { loggedInUser } = useAuth();
   //const { initSocket } = useSocket();
 
