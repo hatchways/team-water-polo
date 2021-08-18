@@ -3,11 +3,25 @@ import { Grid } from '@material-ui/core';
 import useStyles from './useStyles';
 import { Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import Column from './Column';
+import NewColumnButton from './NewColumnButton';
 import mockData from './mockData';
+import MainModal from './Modals/MainModal';
+import { INewTask } from '../../interface/Board';
+import { useImmerReducer } from 'use-immer';
+import reducer, { setDraggedColumn, setDraggedTask, setNewColumn, setNewTask } from '../../utils/reducer';
+import Saving from './Saving';
 
 export default function Board(): JSX.Element {
   const classes = useStyles();
-  const [boardState, setBoardState] = useState(mockData);
+  const [isOpen, setIsOpen] = useState(false);
+  const [columnSide, setColumnSide] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const [state, dispatch] = useImmerReducer(reducer, mockData);
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
@@ -16,91 +30,63 @@ export default function Board(): JSX.Element {
       return;
     }
 
+    const columnData = {
+      sourceIndex: source.index,
+      destinationIndex: destination.index,
+      draggableId: draggableId,
+    };
+
     if (type === 'COLUMN') {
-      const newColumnOrder = [...boardState.columnOrder];
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-      setBoardState({
-        ...boardState,
-        columnOrder: newColumnOrder,
-      });
+      dispatch(setDraggedColumn(columnData));
       return;
     }
 
-    const sourceColumn = boardState.columns[source.droppableId];
-    const sourceTaskIds = [...sourceColumn.taskIds];
-
-    sourceTaskIds.splice(source.index, 1);
-
-    // if moving task to a different column, both destination and source columns must be updated
-    if (destination.droppableId !== source.droppableId) {
-      const destColumn = boardState.columns[destination.droppableId];
-      const destTaskIds = [...destColumn.taskIds];
-
-      destTaskIds.splice(destination.index, 0, draggableId);
-
-      const oldColumn = {
-        ...sourceColumn,
-        taskIds: sourceTaskIds,
-      };
-
-      const newColumn = {
-        ...destColumn,
-        taskIds: destTaskIds,
-      };
-
-      const newState = {
-        ...boardState,
-        columns: {
-          ...boardState.columns,
-          [oldColumn.id]: oldColumn,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      setBoardState(newState);
-      return;
-    }
-
-    sourceTaskIds.splice(destination.index, 0, draggableId);
-
-    const newColumn = {
-      ...sourceColumn,
-      taskIds: sourceTaskIds,
+    const taskData = {
+      ...columnData,
+      sourceId: source.droppableId,
+      destinationId: destination.droppableId,
     };
 
-    const newState = {
-      ...boardState,
-      columns: {
-        ...boardState.columns,
-        [newColumn.id]: newColumn,
-      },
-    };
+    dispatch(setDraggedTask(taskData));
+  };
 
-    setBoardState(newState);
+  const addTask = (newTask: INewTask) => {
+    dispatch(setNewTask(newTask));
+  };
+
+  const addColumn = (title: string) => {
+    dispatch(setNewColumn(title, columnSide));
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="board" direction="horizontal" type="COLUMN">
-        {(provided) => (
-          <Grid
-            container
-            direction="row"
-            className={classes.boardContainer}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {boardState &&
-              boardState.columnOrder.map((columnId, index) => {
-                const column = boardState.columns[columnId];
-                const tasks = column.taskIds.map((taskId: string) => boardState.tasks[taskId]);
-                return <Column key={column.id} column={column} tasks={tasks} index={index} />;
-              })}
-            {provided.placeholder}
-          </Grid>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <Grid container direction="row" className={classes.boardContainer}>
+      <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'left'} />
+      <Grid container item md={10} direction="column">
+        <Saving isSaving={saving} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="board" direction="horizontal" type="COLUMN">
+            {(provided) => (
+              <Grid
+                container
+                direction="row"
+                className={classes.board}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {state &&
+                  state.columnOrder.map((columnId, index) => {
+                    const column = state.columns[columnId];
+                    const tasks = column.taskIds.map((taskId: string) => state.tasks[taskId]);
+                    return <Column key={column.id} column={column} tasks={tasks} index={index} addTask={addTask} />;
+                  })}
+                {provided.placeholder}
+              </Grid>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Grid>
+      <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'right'} />
+      <MainModal isOpen={isOpen} isColumn={true} closeModal={toggleModal} addColumn={addColumn} />
+    </Grid>
   );
 }
