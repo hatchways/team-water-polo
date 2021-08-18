@@ -7,17 +7,24 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
+<<<<<<< HEAD
 import BoardSelector from '../../components/BoardSelector';
+=======
+import MyCalendar from '../Calendar/MyCalendar';
+>>>>>>> feature/calendar
 
 export default function Dashboard(): JSX.Element {
+  const [activeTab, setActiveTab] = useState('board');
   const classes = useStyles();
+<<<<<<< HEAD
   const [state, setState] = React.useState({
     board_selector_shown: false,
     boards: [
@@ -72,6 +79,8 @@ export default function Dashboard(): JSX.Element {
     return current_board.name;
   };
 
+=======
+>>>>>>> feature/calendar
   //const { loggedInUser } = useAuth();
   //const { initSocket } = useSocket();
 
@@ -115,12 +124,24 @@ export default function Dashboard(): JSX.Element {
           <div className="branding--name">Kanban</div>
         </Grid>
         <Grid container item xs={6} component="nav" className="dashboard--header--nav" justifyContent="center">
-          <Button startIcon={<Icon>space_dashboard</Icon>} className="nav--item active" color="primary">
+          <Button
+            startIcon={<Icon>space_dashboard</Icon>}
+            className="nav--item active"
+            color={activeTab === 'board' ? 'primary' : 'default'}
+            onClick={() => setActiveTab('board')}
+          >
             Dashboard
           </Button>
-          <Button startIcon={<Icon>calendar_today</Icon>} className="nav--item">
-            Calendar
-          </Button>
+          <Link>
+            <Button
+              startIcon={<Icon>calendar_today</Icon>}
+              className="nav--item"
+              onClick={() => setActiveTab('calendar')}
+              color={activeTab === 'calendar' ? 'primary' : 'default'}
+            >
+              Calendar
+            </Button>
+          </Link>
         </Grid>
         <Button className="create-board" startIcon={<Icon>add</Icon>} variant="contained" color="primary">
           Create Board
@@ -145,7 +166,10 @@ export default function Dashboard(): JSX.Element {
           onBoardSelect={selectBoard}
         />
       </Grid>
-      <Board />
+      {activeTab === 'calendar' ? <MyCalendar /> : <Board />}
+
+      {/* <Board /> */}
+      {/* <MyCalendar /> */}
     </Grid>
   );
 }
