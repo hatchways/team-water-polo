@@ -9,13 +9,16 @@ const asyncHandler = require("express-async-handler");
 
 exports.loadCard = asyncHandler(async (req, res) => {
   const card = await Card.findById(req.params.id);
+  if (!card) {
+    res.status(404);
+    throw new Error("No Card found");
+  }
   res.status(200).json(card);
 });
 
 exports.createCard = asyncHandler(async (req, res, next) => {
   const { columnId, boardId, title, tag, deadline, description } = req.body;
   const column = await Column.findOne({ _id: columnId, boardId: boardId });
-  console.log(deadline, description);
   if (!column) {
     res.status(404);
     throw new Error("No Column found");
