@@ -1,3 +1,14 @@
+import { ICard, IColumn } from './Board';
+
+export interface IBoardAction {
+  type?: 'SET_BOARD';
+  id: string;
+  title: string;
+  cards: ICard;
+  columns: IColumn;
+  columnOrder: string[];
+}
+
 export interface IColumnAction {
   type?: 'ADD_COLUMN';
   _id: string;

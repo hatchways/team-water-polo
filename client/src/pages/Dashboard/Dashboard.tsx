@@ -1,31 +1,21 @@
-import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Grid, CssBaseline, Button, IconButton, Icon, Link } from '@material-ui/core';
 import useStyles from './useStyles';
-import { useAuth } from '../../context/useAuthContext';
 import { useBoard } from '../../context/useBoardContext';
-import { useHistory } from 'react-router-dom';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
+import MainModal from '../../components/Board/Modals/MainModal';
+import { useState } from 'react';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
-  // const { loggedInUser } = useAuth();
-  const { state, dispatch, setBoardIndex } = useBoard();
+  const { state, dispatch, createNewBoard } = useBoard();
 
-  // const history = useHistory();
-
-  // if (loggedInUser === undefined) return <CircularProgress />;
-  // if (!loggedInUser) {
-  //   history.push('/login');
-  //   // loading for a split seconds until history.push works
-  //   return <CircularProgress />;
-  // }
+  const toggleModal = () => {
+    setOpen((open) => !open);
+  };
 
   return (
     <Grid container direction="column" className={`${classes.root} ${classes.dashboard}`}>
@@ -52,7 +42,13 @@ export default function Dashboard(): JSX.Element {
             Calendar
           </Button>
         </Grid>
-        <Button className="create-board" startIcon={<Icon>add</Icon>} variant="contained" color="primary">
+        <Button
+          className="create-board"
+          startIcon={<Icon>add</Icon>}
+          onClick={toggleModal}
+          variant="contained"
+          color="primary"
+        >
           Create Board
         </Button>
         <IconButton className="user-button">
@@ -67,7 +63,16 @@ export default function Dashboard(): JSX.Element {
           <Icon>menu</Icon>
         </Grid>
       </Grid>
-      {state && <Board state={state} dispatch={dispatch} />}
+      <MainModal isOpen={open} closeModal={toggleModal} submitForm={createNewBoard} kind={'board'} />
+      {state?.id ? (
+        <Board state={state} dispatch={dispatch} />
+      ) : (
+        <Grid container justifyContent="center" alignItems="center" style={{ height: '70vh' }}>
+          <Link component="button" variant="h6" color="primary" onClick={toggleModal}>
+            Get started by creating a new board
+          </Link>
+        </Grid>
+      )}
     </Grid>
   );
 }

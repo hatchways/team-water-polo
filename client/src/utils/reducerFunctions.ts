@@ -1,5 +1,5 @@
 import { IBoardData } from '../interface/Board';
-import { IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
+import { IBoardAction, IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
 import { updateCardOrder, updateColumnOrder } from '../helpers/APICalls/updateBoard';
 
 export function addCardToColumn(state: IBoardData, data: ICardAction): void {
@@ -44,4 +44,13 @@ export function moveColumn(state: IBoardData, data: IMoveAction): void {
   state.columnOrder.splice(sourceIndex, 1);
   state.columnOrder.splice(destinationIndex, 0, draggableId);
   updateColumnOrder(state.columnOrder, state.id);
+}
+
+export function setBoard(state: IBoardData, data: IBoardAction): void {
+  const { id, title, cards, columns, columnOrder } = data;
+  state.id = id;
+  state.title = title;
+  state.cards = cards;
+  state.columns = { ...columns };
+  state.columnOrder = [...columnOrder];
 }

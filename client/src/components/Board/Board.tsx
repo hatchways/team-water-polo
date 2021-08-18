@@ -94,7 +94,7 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
         </Droppable>
       </DragDropContext>
       <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'right'} />
-      <MainModal isOpen={isOpen} isColumn={true} closeModal={toggleModal} addColumn={addColumn} />
+      <MainModal isOpen={isOpen} closeModal={toggleModal} submitForm={addColumn} kind={'column'} />
     </Grid>
   );
 }

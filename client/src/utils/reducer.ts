@@ -1,11 +1,12 @@
-import { addCardToColumn, addColumnToBoard, moveColumn, moveCard } from './reducerFunctions';
-import { IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
+import { addCardToColumn, addColumnToBoard, moveColumn, moveCard, setBoard } from './reducerFunctions';
+import { IBoardAction, IColumnAction, ICardAction, IMoveAction } from '../interface/BoardActions';
 import { IBoardData } from '../interface/Board';
 
 // Actions
 
 const ADD_CARD = 'ADD_CARD';
 const ADD_COLUMN = 'ADD_COLUMN';
+const SET_BOARD = 'SET_BOARD';
 const MOVE_CARD = 'MOVE_CARD';
 const MOVE_COLUMN = 'MOVE_COLUMN';
 
@@ -26,6 +27,13 @@ export const setNewColumn = (column: IColumnAction, side: string): IColumnAction
   };
 };
 
+export const setNewBoard = (board: IBoardData): IBoardAction => {
+  return {
+    type: SET_BOARD,
+    ...board,
+  };
+};
+
 export const setDraggedCard = (data: IMoveAction): IMoveAction => {
   return {
     type: MOVE_CARD,
@@ -42,7 +50,7 @@ export const setDraggedColumn = (data: IMoveAction): IMoveAction => {
 
 // Reducer
 
-type IActions = IColumnAction | ICardAction | IMoveAction;
+type IActions = IBoardAction | IColumnAction | ICardAction | IMoveAction;
 
 export default function reducer(draft: IBoardData, action: IActions): void | IBoardData {
   switch (action.type) {
@@ -50,6 +58,8 @@ export default function reducer(draft: IBoardData, action: IActions): void | IBo
       return addCardToColumn(draft, action);
     case ADD_COLUMN:
       return addColumnToBoard(draft, action);
+    case SET_BOARD:
+      return setBoard(draft, action);
     case MOVE_CARD:
       return moveCard(draft, action);
     case MOVE_COLUMN:

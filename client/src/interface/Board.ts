@@ -1,9 +1,17 @@
+import { IMoveAction } from './BoardActions';
+
 export interface IBoardData {
   id: string;
   title: string;
   cards: ICard;
   columns: IColumn;
   columnOrder: string[];
+}
+
+export interface IBoardContext {
+  state: IBoardData | undefined;
+  dispatch: (arg: INewCard | IMoveAction | string | { title: string; side: string }) => void;
+  createNewBoard: (arg1: string) => void;
 }
 
 export interface ICard {

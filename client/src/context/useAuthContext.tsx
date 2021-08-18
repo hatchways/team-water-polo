@@ -7,12 +7,14 @@ import logoutAPI from '../helpers/APICalls/logout';
 
 interface IAuthContext {
   loggedInUser: User | null | undefined;
+  setLoggedInUser: (user: User) => void;
   updateLoginContext: (data: AuthApiDataSuccess) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
   loggedInUser: undefined,
+  setLoggedInUser: () => null,
   updateLoginContext: () => null,
   logout: () => null,
 });
@@ -57,7 +59,11 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
     checkLoginWithCookies();
   }, [updateLoginContext, history]);
 
-  return <AuthContext.Provider value={{ loggedInUser, updateLoginContext, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ loggedInUser, setLoggedInUser, updateLoginContext, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export function useAuth(): IAuthContext {

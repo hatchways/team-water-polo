@@ -15,13 +15,12 @@ import useStyles from './useStyles';
 
 interface Props {
   isOpen: boolean;
-  isColumn: boolean;
   closeModal: () => void;
-  addColumn: (newTask: string) => void;
+  submitForm: (title: string) => void;
+  kind: string;
 }
 
-// this is set up to work with both the new column and 'create board' buttons
-export default function MainModal({ isOpen, isColumn, closeModal, addColumn }: Props): JSX.Element {
+export default function MainModal({ isOpen, closeModal, submitForm, kind }: Props): JSX.Element {
   const classes = useStyles();
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +28,7 @@ export default function MainModal({ isOpen, isColumn, closeModal, addColumn }: P
   const handleSubmit = () => {
     if (title.trim()) {
       setError('');
-      addColumn(title);
+      submitForm(title);
       closeModal();
     } else {
       setError('Please enter a valid title');
@@ -39,14 +38,14 @@ export default function MainModal({ isOpen, isColumn, closeModal, addColumn }: P
   return (
     <Dialog open={isOpen} aria-labelledby="form-dialog-title" maxWidth="xs" fullWidth>
       <Grid container justifyContent="flex-end">
-        <IconButton onClick={closeModal} className={classes.closeBtn}>
+        <IconButton onClick={closeModal} className={classes.closeButton}>
           <CloseIcon className={classes.icon} />
         </IconButton>
       </Grid>
       <Grid container direction="column" alignItems="center">
         <DialogTitle id="form-dialog-title" disableTypography={true}>
           <Typography variant="h4">
-            <strong>Create a new {isColumn ? 'column' : 'board'}</strong>
+            <strong>Create a new {kind}</strong>
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.input}>
@@ -62,7 +61,7 @@ export default function MainModal({ isOpen, isColumn, closeModal, addColumn }: P
             onChange={(e) => setTitle(e.target.value)}
           />
         </DialogContent>
-        <DialogActions className={classes.createBtn}>
+        <DialogActions className={classes.createButton}>
           <Button color="primary" variant="contained" size="large" onClick={handleSubmit} fullWidth>
             Create
           </Button>

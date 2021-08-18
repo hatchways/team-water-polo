@@ -4,6 +4,7 @@ const Column = require("../models/Column");
 const Card = require("../models/Card");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const mapToBoard = require("../utils/mapToBoard");
 
 // @route POST /auth/register
 // @desc Register user
@@ -74,23 +75,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 
   if (user && (await user.matchPassword(password))) {
     const boards = [];
-
-    function mapToBoard(data) {
-      const cards = {};
-      const columns = {};
-      for (const column of data.columns) {
-        column.cards.forEach((card) => (cards[card._id] = card));
-        columns[column.id] = column;
-      }
-
-      return {
-        id: data._id,
-        title: data.title,
-        cards: cards,
-        columns: columns,
-        columnOrder: data.columnOrder,
-      };
-    }
 
     user.boards.forEach((board) => boards.push(mapToBoard(board)));
 

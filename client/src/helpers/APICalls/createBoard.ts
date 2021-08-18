@@ -1,7 +1,7 @@
-import { BoardApiData } from '../../interface/BoardApiData';
+import { IBoardData } from '../../interface/Board';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-const createBoard = async (title: string, userId: string): Promise<BoardApiData> => {
+const createBoard = async (title: string, userId: string): Promise<IBoardData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

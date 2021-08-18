@@ -1,49 +1,37 @@
-import { useState, useContext, createContext, FunctionComponent } from 'react';
-import { IBoardData, INewCard } from '../interface/Board';
-import { IMoveAction } from '../interface/BoardActions';
-import reducer from '../utils/reducer';
+import { useContext, createContext, FunctionComponent } from 'react';
+import { IBoardData, IBoardContext } from '../interface/Board';
+import reducer, { setNewBoard } from '../utils/reducer';
 import { useImmerReducer } from 'use-immer';
 import { useAuth } from './useAuthContext';
 import createBoard from '../helpers/APICalls/createBoard';
-import { useEffect } from 'react';
-
-interface IBoardContext {
-  state: IBoardData | undefined;
-  dispatch: (arg: INewCard | IMoveAction | string | { title: string; side: string }) => void;
-  setBoardIndex: (arg: number) => void;
-}
 
 export const BoardContext = createContext<IBoardContext>({
   state: undefined,
   dispatch: () => null,
-  setBoardIndex: () => null,
+  createNewBoard: () => null,
 });
 
 export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const { loggedInUser } = useAuth();
-  const [boardIndex, setBoardIndex] = useState(0);
-  const [selectedBoard, setSelectedBoard] = useState<IBoardData>(
-    loggedInUser?.boards[boardIndex] ?? ({} as IBoardData),
-  );
+  const { loggedInUser, setLoggedInUser } = useAuth();
 
-  useEffect(() => {
-    const checkForBoard = async () => {
-      if (loggedInUser && !loggedInUser.boards.length) {
-        // if the user does not have any boards yet, create one
-        const newBoard = await createBoard('New board', loggedInUser.id);
-        if (newBoard.success) {
-          loggedInUser.boards.push(newBoard.success.board);
-        }
-      } else if (loggedInUser?.boards.length) {
-        setSelectedBoard(loggedInUser.boards[boardIndex]);
+  const [state, dispatch] = useImmerReducer(reducer, loggedInUser?.boards[0] ?? ({} as IBoardData));
+
+  async function createNewBoard(title: string): Promise<void> {
+    if (loggedInUser) {
+      const newBoard = await createBoard(title, loggedInUser.id);
+      if (newBoard) {
+        setLoggedInUser({
+          ...loggedInUser,
+          boards: [...loggedInUser.boards, newBoard],
+        });
+        dispatch(setNewBoard(newBoard));
+      } else {
+        console.log('there was a problem creating the board');
       }
-    };
-    checkForBoard();
-  }, [loggedInUser, boardIndex]);
+    }
+  }
 
-  const [state, dispatch] = useImmerReducer(reducer, selectedBoard);
-
-  return <BoardContext.Provider value={{ state, dispatch, setBoardIndex }}>{children}</BoardContext.Provider>;
+  return <BoardContext.Provider value={{ state, dispatch, createNewBoard }}>{children}</BoardContext.Provider>;
 };
 
 export function useBoard(): IBoardContext {

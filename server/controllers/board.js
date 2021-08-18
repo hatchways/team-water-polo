@@ -3,7 +3,7 @@ const Board = require("../models/Board");
 const Column = require("../models/Column");
 const Card = require("../models/Card");
 const asyncHandler = require("express-async-handler");
-const generateToken = require("../utils/generateToken");
+const mapToBoard = require("../utils/mapToBoard");
 
 // Create new board
 exports.createBoard = asyncHandler(async (req, res, next) => {
@@ -36,7 +36,7 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
   board.save();
   user.save();
 
-  res.status(200).json(board);
+  res.status(200).json(mapToBoard(board));
 });
 
 // get an existing board
