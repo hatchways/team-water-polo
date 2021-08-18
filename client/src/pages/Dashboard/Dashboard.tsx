@@ -15,16 +15,12 @@ import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
-<<<<<<< HEAD
 import BoardSelector from '../../components/BoardSelector';
-=======
 import MyCalendar from '../Calendar/MyCalendar';
->>>>>>> feature/calendar
 
 export default function Dashboard(): JSX.Element {
   const [activeTab, setActiveTab] = useState('board');
   const classes = useStyles();
-<<<<<<< HEAD
   const [state, setState] = React.useState({
     board_selector_shown: false,
     boards: [
@@ -79,8 +75,6 @@ export default function Dashboard(): JSX.Element {
     return current_board.name;
   };
 
-=======
->>>>>>> feature/calendar
   //const { loggedInUser } = useAuth();
   //const { initSocket } = useSocket();
 
