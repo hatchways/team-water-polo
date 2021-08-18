@@ -15,7 +15,6 @@ exports.loadCard = asyncHandler(async (req, res) => {
 exports.createCard = asyncHandler(async (req, res, next) => {
   const { columnId, boardId, title, tag, deadline, description } = req.body;
   const column = await Column.findOne({ _id: columnId, boardId: boardId });
-  console.log(deadline, description);
   if (!column) {
     res.status(404);
     throw new Error("No Column found");
@@ -34,8 +33,8 @@ exports.createCard = asyncHandler(async (req, res, next) => {
   const newCard = await Card.create({
     title,
     tag,
-    description: description,
-    deadline: deadline,
+    description,
+    deadline,
     columnId: column._id,
     boardId: boardId,
     images: [...images],
@@ -52,7 +51,7 @@ exports.updateCard = asyncHandler(async (req, res) => {
     throw new Error("No Card found");
   }
 
-  const { currentImages, title, tag } = req.body;
+  const { currentImages, title, tag, deadline, description } = req.body;
   // currentImages is an array containing the keys of current images in the card
   // update the images in db based on the current images in the card
   if (card.images.length && currentImages.length) {
@@ -72,8 +71,16 @@ exports.updateCard = asyncHandler(async (req, res) => {
     );
   }
 
+  if (tag) {
+    card.tag = tag;
+  }
+  if (deadline) {
+    card.deadline = deadline;
+  }
+  if (description) {
+    card.description = description;
+  }
   card.title = title;
-  card.tag = tag;
   card.images = [...currentImages, ...images];
   card.save();
   res.status(200).json(card);
