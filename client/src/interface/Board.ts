@@ -8,7 +8,7 @@ export interface ITask {
   [name: string]: {
     id: string;
     content: string;
-    tag?: string;
+    tag: string;
     date?: Date;
   };
 }
@@ -30,6 +30,12 @@ export interface IPropColumn {
 export interface IPropTask {
   id: string;
   content: string;
-  tag?: string;
+  tag: string;
   date?: Date;
+}
+
+export interface INewTask {
+  content: string;
+  tag: string;
+  columnId: string;
 }
