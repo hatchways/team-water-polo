@@ -1,19 +1,16 @@
 const mongoose = require("mongoose");
 
 const inviteSchema = new mongoose.Schema({
-  senderId : {
+  sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     index: {
       unique: true,
-      partialFilterExpression: {userId:
-        {$type: mongoose.Schema.Types.ObjectId}
-      }
+      partialFilterExpression: {email: {$type: "string"}}
     }
   },
   email: {
@@ -24,9 +21,9 @@ const inviteSchema = new mongoose.Schema({
       partialFilterExpression: {email: {$type: "string"}}
     }
   },
-  board : {
+  team: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Board",
+    ref: "Team",
     required: true,
   },
 },
@@ -37,7 +34,7 @@ const inviteSchema = new mongoose.Schema({
 
 inviteSchema.pre('validate', async function(next) {
   // ensures one field exists but not both
-  return (!this.email !== !this.userId)
+  return (!this.email !== !this.user)
   ? next()
   : next(new Error('No user ID or email address provided'));
 });
