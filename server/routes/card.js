@@ -1,15 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { validateCreateCard, validateCard } = require('../middleware/validate');
+const { validateCreateCard, validateCard, validateUpdateCard } = require('../middleware/validate');
 const protect = require('../middleware/auth');
 const {
+  loadCard,
   createCard,
   updateCard,
   moveCard
 } = require('../controllers/card');
 
-router.route('/').post(protect, validateCard, createCard);
-router.route('/:id/update').patch(protect, validateCard, updateCard);
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
+router.route('/').post(protect, upload.array('images', 12), validateCard, createCard);
+router.route('/:id/update').patch(protect, upload.array('images', 12), validateUpdateCard, updateCard);
 router.route('/:id/move').patch(protect, moveCard);
 
 module.exports = router;

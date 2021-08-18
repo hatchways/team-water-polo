@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  avatar: {    
+    type: String,
+    unique: true,
+    default: '5a7cd3c023db2417a00f78e54e27f566' 
+  },
   registerDate: {
     type: Date,
     default: Date.now,

@@ -9,6 +9,7 @@ import { IBoardData, INewCard } from '../../interface/Board';
 import { setDraggedColumn, setDraggedCard, setNewColumn, setNewCard } from '../../utils/reducer';
 import { addCardToDb, addColumnToDb } from '../../utils/thunk';
 import { IMoveAction } from '../../interface/BoardActions';
+import Saving from './Saving';
 
 type dispatchTypes = INewCard | IMoveAction | string | { title: string; side: string };
 
@@ -21,6 +22,7 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [columnSide, setColumnSide] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -72,27 +74,30 @@ export default function Board({ state, dispatch }: Props): JSX.Element {
   return (
     <Grid container direction="row" className={classes.boardContainer}>
       <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'left'} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="board" direction="horizontal" type="COLUMN">
-          {(provided) => (
-            <Grid
-              container
-              direction="row"
-              className={classes.board}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {state.id &&
-                state.columnOrder.map((columnId, index) => {
-                  const column = state.columns[columnId];
-                  const cards = column.cardOrder.map((cardId: string) => state.cards[cardId]);
-                  return <Column key={column._id} column={column} cards={cards} index={index} addCard={addCard} />;
-                })}
-              {provided.placeholder}
-            </Grid>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Grid container item md={10} direction="column">
+        <Saving isSaving={saving} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="board" direction="horizontal" type="COLUMN">
+            {(provided) => (
+              <Grid
+                container
+                direction="row"
+                className={classes.board}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {state.id &&
+                  state.columnOrder.map((columnId, index) => {
+                    const column = state.columns[columnId];
+                    const cards = column.cardOrder.map((cardId: string) => state.cards[cardId]);
+                    return <Column key={column._id} column={column} cards={cards} index={index} addCard={addCard} />;
+                  })}
+                {provided.placeholder}
+              </Grid>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Grid>
       <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'right'} />
       <MainModal isOpen={isOpen} closeModal={toggleModal} submitForm={addColumn} kind={'column'} />
     </Grid>

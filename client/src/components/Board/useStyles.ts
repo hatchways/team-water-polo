@@ -9,18 +9,18 @@ const useStyles = makeStyles((theme) => ({
   },
   board: {
     flex: 1,
-    flexWrap: 'nowrap',
+    flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    maxWidth: '80%',
   },
   columnHeader: {
     justifyContent: 'space-between',
     padding: '5px 20px',
   },
   columnContainer: {
-    margin: '8px',
+    margin: theme.spacing(1),
     backgroundColor: theme.palette.info.main,
     borderRadius: '10px',
+    flex: 1,
     flexDirection: 'column',
     blockSize: 'fit-content',
   },

@@ -15,10 +15,10 @@ const cardSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Column",
     },
-  },
-  {
-    timestamps: true,
-  }
-);
+    images : []
+},
+{
+  timestamps: true
+});
 
 module.exports = Card = mongoose.model("Card", cardSchema);
