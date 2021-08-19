@@ -74,22 +74,16 @@ exports.updateCard = asyncHandler(async (req, res) => {
       })
     );
   }
-
-  if (tag) {
-    card.tag = tag;
-  }
-  if (deadline) {
-    card.deadline = deadline;
-  }
-  if (description) {
-    card.description = description;
-  }
+  card.tag = tag ? tag : card.tag;
+  card.deadline = deadline ? deadline : card.deadline;
+  card.description = description ? description : card.description;
   card.title = title;
   card.tag = tag;
   card.images = [...currentImages, ...images];
   card.save();
   res.status(200).json(card);
 });
+
 // Move Card between columns
 exports.moveCard = asyncHandler(async (req, res) => {
   const { currentColumnId, newColumnId, sourceIndex, destinationIndex } =
