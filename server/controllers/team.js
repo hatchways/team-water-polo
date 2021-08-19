@@ -93,10 +93,15 @@ exports.deleteTeam = asyncHandler(async (req, res) => {
     throw new Error("Not authorized");
   }
   const team = await Team.findById(req.params.id);
+  if (!team) {
+    res.status(404);
+    throw new Error("No Team found");
+  }
+
   if (JSON.stringify(team.ownerId) !== JSON.stringify(user._id)) {
     res.status(403);
     throw new Error("You dont have permission to do this!");
   }
   await Team.findByIdAndDelete(team._id);
-  res.status(204).send("Deleted!");
+  res.status(204);
 });

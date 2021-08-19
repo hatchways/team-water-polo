@@ -9,14 +9,9 @@ const {
   deleteTeam,
 } = require("../controllers/team");
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-
 router.route("/:id").get(protect, loadTeam);
-router
-  .route("/")
-  .post(protect, upload.array("images", 12), validateTeam, createTeam);
-router.route("/:id").patch(protect, upload.array("images", 12), updateTeam);
+router.route("/").post(protect, validateTeam, createTeam);
+router.route("/:id").patch(protect, updateTeam);
 router.route("/:id").delete(protect, deleteTeam);
 
 module.exports = router;
