@@ -7,14 +7,25 @@ const cardSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    description: {
+      type: String,
+    },
     tag: {
       type: String,
-      required: true,
+      default: "white",
+    },
+    deadline: {
+      type: Date,
     },
     columnId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Column",
     },
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Board",
+    },
+
     images: [],
   },
   {
