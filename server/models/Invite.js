@@ -34,7 +34,7 @@ const inviteSchema = new mongoose.Schema({
 
 inviteSchema.pre('validate', async function(next) {
   // ensures one field exists but not both
-  return (!this.email !== !this.user)
+  return (!this.email !== !this.userId)
   ? next()
   : next(new Error('No user ID or email address provided'));
 });
