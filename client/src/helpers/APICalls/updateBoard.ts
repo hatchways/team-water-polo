@@ -36,11 +36,11 @@ export const updateCardOrder = async ({
     }));
 };
 
-export const addNewCard = async ({ columnId, content, tag }: INewCard, boardId: string): Promise<ICardAction> => {
+export const addNewCard = async ({ columnId, title, tag }: INewCard, boardId: string): Promise<ICardAction> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ columnId, content, tag, boardId }),
+    body: JSON.stringify({ columnId, title, tag, boardId }),
     credentials: 'include',
   };
   return await fetch(`/cards`, fetchOptions)

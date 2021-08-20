@@ -23,7 +23,7 @@ export default function Task({ card, index }: Props): JSX.Element {
             <CardContent>
               <Box className={classes.tag} style={{ backgroundColor: card.tag ?? 'white' }}></Box>
               <Typography variant="h6" className={classes.cardContent}>
-                <strong>{card.content}</strong>
+                <strong>{card.title}</strong>
               </Typography>
               <Typography variant="subtitle2">
                 {card.date?.toLocaleDateString('en-us', { month: 'long', day: '2-digit' }) ?? ''}

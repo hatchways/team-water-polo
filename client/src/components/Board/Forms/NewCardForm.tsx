@@ -5,7 +5,7 @@ import { useImmer } from 'use-immer';
 
 // white, green, red, orange, blue, purple
 const tagColors = ['#fff', '#5acd76', '#ff5d48', '#edab1d', '#59b0ff', '#d460f7'];
-const initialState = { content: '', tag: '', error: false };
+const initialState = { title: '', tag: '', error: false };
 
 interface Props {
   addCard: (newCard: INewCard) => void;
@@ -18,9 +18,9 @@ export default function NewCardForm({ addCard, closeForm, columnId }: Props): JS
 
   const [form, updateForm] = useImmer(initialState);
 
-  const updateContent = (content: string) => {
+  const updateTitle = (title: string) => {
     updateForm((draft) => {
-      draft.content = content;
+      draft.title = title;
     });
   };
 
@@ -31,9 +31,9 @@ export default function NewCardForm({ addCard, closeForm, columnId }: Props): JS
   };
 
   const handleSubmit = () => {
-    if (form.content) {
+    if (form.title) {
       addCard({
-        content: form.content,
+        title: form.title,
         tag: form.tag,
         columnId: columnId,
       });
@@ -54,7 +54,7 @@ export default function NewCardForm({ addCard, closeForm, columnId }: Props): JS
             required
             name="content"
             defaultValue="Add title..."
-            onChange={(e) => updateContent(e.target.value)}
+            onChange={(e) => updateTitle(e.target.value)}
             className={classes.contentInput}
             error={form.error}
             fullWidth

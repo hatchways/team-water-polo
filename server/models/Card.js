@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const cardSchema = new mongoose.Schema(
   {
-    content: {
+    title: {
       type: String,
       required: true,
       unique: true,
@@ -15,10 +15,11 @@ const cardSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Column",
     },
-    images : []
-},
-{
-  timestamps: true
-});
+    images: [],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = Card = mongoose.model("Card", cardSchema);

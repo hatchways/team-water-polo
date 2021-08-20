@@ -19,7 +19,7 @@ export interface IBoardContext {
 export interface ICard {
   [name: string]: {
     _id: string;
-    content: string;
+    title: string;
     tag: string;
     date?: Date;
   };
@@ -43,14 +43,14 @@ export interface IPropColumn {
 
 export interface IPropCard {
   _id: string;
-  content: string;
+  title: string;
   tag: string;
   date?: Date;
 }
 
 export interface INewCard {
   id?: string;
-  content: string;
+  title: string;
   tag: string;
   columnId: string;
 }

@@ -21,7 +21,7 @@ export interface IColumnAction {
 export interface ICardAction {
   type?: 'ADD_CARD';
   _id: string;
-  content: string;
+  title: string;
   tag: string;
   columnId: string;
 }

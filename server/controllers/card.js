@@ -1,14 +1,14 @@
 const Card = require("../models/Card");
 const Column = require("../models/Column");
-const fs = require('fs');
-const util = require('util');
+const fs = require("fs");
+const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-const { uploadFile} = require('../s3');
+const { uploadFile } = require("../s3");
 const deleteImagesInS3 = require("../utils/deleteImagesInS3");
 const asyncHandler = require("express-async-handler");
 
 exports.createCard = asyncHandler(async (req, res, next) => {
-  const { columnId, boardId, content, tag } = req.body;
+  const { columnId, boardId, title, tag } = req.body;
 
   const column = await Column.findOne({ _id: columnId, boardId: boardId });
 
@@ -16,59 +16,63 @@ exports.createCard = asyncHandler(async (req, res, next) => {
     res.status(404);
     throw new Error("No Column found");
   }
-  const files = req.files
-  let images = []
-  if(files.length) {
-    images = await Promise.all (files.map(async file => {
-      const result = await uploadFile(file)
-      await unlinkFile(file.path)
-      return result.key
-    }))
+  const files = req.files;
+  let images = [];
+  if (files.length) {
+    images = await Promise.all(
+      files.map(async (file) => {
+        const result = await uploadFile(file);
+        await unlinkFile(file.path);
+        return result.key;
+      })
+    );
   }
   const newCard = await Card.create({
-    content,
+    title,
     tag,
     columnId: column._id,
-    images : [...images]
+    images: [...images],
   });
-  
+
   column.cards.push(newCard);
   column.cardOrder.push(newCard._id);
   column.save();
   res.status(200).json(newCard);
 });
 
-exports.updateCard = asyncHandler(async (req, res)=> {
-  const card = await Card.findById(req.params.id)
+exports.updateCard = asyncHandler(async (req, res) => {
+  const card = await Card.findById(req.params.id);
   if (!card) {
     res.status(404);
     throw new Error("No Card found");
   }
 
-  const {currentImages, title, tag} = req.body
+  const { currentImages, title, tag } = req.body;
   // currentImages is an array containing the keys of current images in the card
   // update the images in db based on the current images in the card
-  if(card.images.length && currentImages.length) {
-    await deleteImagesInS3(card.images, currentImages)
-  }
-  
-  const files = req.files
-  let images = []
-  // if user additionally upload new image, save them as well
-  if(files.length) {
-    images = await Promise.all (files.map(async file => {
-      const result = await uploadFile(file)
-      await unlinkFile(file.path)
-      return result.key
-    }))
+  if (card.images.length && currentImages.length) {
+    await deleteImagesInS3(card.images, currentImages);
   }
 
-  card.title = title
-  card.tag  = tag
-  card.images = [...currentImages, ...images]
-  card.save()
-  res.status(200).json(card)
-})
+  const files = req.files;
+  let images = [];
+  // if user additionally upload new image, save them as well
+  if (files.length) {
+    images = await Promise.all(
+      files.map(async (file) => {
+        const result = await uploadFile(file);
+        await unlinkFile(file.path);
+        return result.key;
+      })
+    );
+  }
+
+  card.title = title;
+  card.tag = tag;
+  card.images = [...currentImages, ...images];
+  card.save();
+  res.status(200).json(card);
+});
 
 // Move Card between columns
 exports.moveCard = asyncHandler(async (req, res) => {
