@@ -1,54 +1,24 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Grid, CssBaseline, Button, IconButton, Icon, Link } from '@material-ui/core';
 import useStyles from './useStyles';
-import { useAuth } from '../../context/useAuthContext';
-import { useSocket } from '../../context/useSocketContext';
-import { useHistory } from 'react-router-dom';
-import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
-import { useEffect, useState } from 'react';
+import { useBoard } from '../../context/useBoardContext';
 import Avatar from '../../Images/68f55f7799df6c8078a874cfe0a61a5e6e9e1687.png';
 import BrandingLogo from './BrandingLogo';
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
 import Board from '../../components/Board/Board';
+import MainModal from '../../components/Board/Modals/MainModal';
+import React, { useState } from 'react';
 import BoardSelector from '../../components/BoardSelector';
 import MyCalendar from '../Calendar/MyCalendar';
 
 export default function Dashboard(): JSX.Element {
-  const [activeTab, setActiveTab] = useState('board');
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    board_selector_shown: false,
-    boards: [
-      {
-        id: 'school',
-        name: 'My School Board',
-      },
-      {
-        id: 'personal',
-        name: 'Personal Board',
-      },
-      {
-        id: 'shopping',
-        name: 'Shopping Lists & Purchases',
-      },
-      {
-        id: 'business',
-        name: 'Business Ideas',
-      },
-    ],
-    current_board: 'school',
-  });
+  const [activeTab, setActiveTab] = useState('board');
+  const [open, setOpen] = useState(false);
+  const [selectorShown, setSelectorShown] = useState(false);
 
-  const toggleBoardSelector = (event: React.MouseEvent) => {
-    setState((prevState) => {
-      const board_selector_shown = !prevState.board_selector_shown;
-      return Object.assign({}, prevState, { board_selector_shown });
-    });
+  const { state, dispatch, boardList, setActiveBoard, createNewBoard } = useBoard();
+
+  const toggleBoardSelector = () => {
+    setSelectorShown((prevState) => !prevState);
   };
 
   const selectBoard = (event: React.MouseEvent) => {
@@ -58,47 +28,12 @@ export default function Dashboard(): JSX.Element {
       board_button = board_button.parentNode as HTMLElement;
       board_id = board_button.dataset.board_id;
     }
-
-    setState((prevState) => {
-      return Object.assign({}, prevState, {
-        current_board: board_id,
-        board_selector_shown: !prevState.board_selector_shown,
-      });
-    });
+    setActiveBoard(board_id);
   };
 
-  const getCurrentBoardName = () => {
-    const current_board_id = state.current_board;
-    const current_board = state.boards.filter((board) => {
-      return board.id === current_board_id;
-    })[0];
-    return current_board.name;
+  const toggleModal = () => {
+    setOpen((open) => !open);
   };
-
-  //const { loggedInUser } = useAuth();
-  //const { initSocket } = useSocket();
-
-  //const history = useHistory();
-
-  // useEffect(() => {
-  //   initSocket();
-  // }, [initSocket]);
-
-  // if (loggedInUser === undefined) return <CircularProgress />;
-  // if (!loggedInUser) {
-  //   history.push('/login');
-  //   // loading for a split seconds until history.push works
-  //   return <CircularProgress />;
-  // }
-
-  // return (
-  //   <Grid container component="main" className={`${classes.root} ${classes.dashboard}`}>
-  //     <CssBaseline />
-  //     <Grid item className={classes.drawerWrapper}>
-  //       <ChatSideBanner loggedInUser={loggedInUser} />
-  //     </Grid>
-  //   </Grid>
-  // );
 
   return (
     <Grid container direction="column" className={`${classes.root} ${classes.dashboard}`}>
@@ -137,7 +72,13 @@ export default function Dashboard(): JSX.Element {
             </Button>
           </Link>
         </Grid>
-        <Button className="create-board" startIcon={<Icon>add</Icon>} variant="contained" color="primary">
+        <Button
+          className="create-board"
+          startIcon={<Icon>add</Icon>}
+          onClick={toggleModal}
+          variant="contained"
+          color="primary"
+        >
           Create Board
         </Button>
         <IconButton className="user-button">
@@ -147,23 +88,33 @@ export default function Dashboard(): JSX.Element {
       <Grid container item xs={12} component="main" className="main">
         <Grid container item xs={12} className="main--header">
           <Grid item xs={6} component="h1">
-            {getCurrentBoardName()}
+            {state && state.title}
           </Grid>
           <IconButton onClick={toggleBoardSelector}>
             <Icon>dashboard</Icon>
           </IconButton>
         </Grid>
         <BoardSelector
-          open={state.board_selector_shown}
+          open={selectorShown}
           onClose={toggleBoardSelector}
-          boards={state.boards}
+          boards={boardList}
           onBoardSelect={selectBoard}
         />
       </Grid>
-      {activeTab === 'calendar' ? <MyCalendar /> : <Board />}
-
-      {/* <Board /> */}
-      {/* <MyCalendar /> */}
+      <MainModal isOpen={open} closeModal={toggleModal} submitForm={createNewBoard} kind={'board'} />
+      {state?.id ? (
+        activeTab === 'calendar' ? (
+          <MyCalendar />
+        ) : (
+          <Board state={state} dispatch={dispatch} />
+        )
+      ) : (
+        <Grid container justifyContent="center" alignItems="center" style={{ height: '70vh' }}>
+          <Link component="button" variant="h6" color="primary" onClick={toggleModal}>
+            Get started by creating a new board
+          </Link>
+        </Grid>
+      )}
     </Grid>
   );
 }

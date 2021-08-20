@@ -1,13 +1,25 @@
+import { IMoveAction } from './BoardActions';
+
 export interface IBoardData {
-  tasks: ITask;
+  id: string;
+  title: string;
+  cards: ICard;
   columns: IColumn;
   columnOrder: string[];
 }
 
-export interface ITask {
+export interface IBoardContext {
+  state: IBoardData | undefined;
+  dispatch: (arg: INewCard | IMoveAction | string | { title: string; side: string }) => void;
+  boardList: { title: string; id: string }[];
+  setActiveBoard: (arg: string) => void;
+  createNewBoard: (arg: string) => void;
+}
+
+export interface ICard {
   [name: string]: {
-    id: string;
-    content: string;
+    _id: string;
+    title: string;
     tag: string;
     date?: Date;
   };
@@ -15,27 +27,30 @@ export interface ITask {
 
 export interface IColumn {
   [name: string]: {
-    id: string;
+    _id: string;
     title: string;
-    taskIds: string[];
+    cards: ICard[];
+    cardOrder: string[];
   };
 }
 
 export interface IPropColumn {
-  id: string;
+  _id: string;
   title: string;
-  taskIds: string[];
+  cards: ICard[];
+  cardOrder: string[];
 }
 
-export interface IPropTask {
-  id: string;
-  content: string;
+export interface IPropCard {
+  _id: string;
+  title: string;
   tag: string;
   date?: Date;
 }
 
-export interface INewTask {
-  content: string;
+export interface INewCard {
+  id?: string;
+  title: string;
   tag: string;
   columnId: string;
 }

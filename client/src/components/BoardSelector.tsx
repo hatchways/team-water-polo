@@ -1,18 +1,11 @@
 import React from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListSubHeader from '@material-ui/core/ListSubheader';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Icon from '@material-ui/core/Icon';
+import { Drawer, List, ListSubheader, ListItem, ListItemIcon, ListItemText, Icon } from '@material-ui/core';
 
 type ReactCallback = (event: React.MouseEvent) => void;
-type ReactBoardSelection = (board_id: string) => void;
 
 interface Board {
+  title: string;
   id: string;
-  name: string;
 }
 
 interface Props {
@@ -28,9 +21,9 @@ export default function BoardSelector(props: Props): JSX.Element {
       <List
         component="nav"
         subheader={
-          <ListSubHeader component="div" id="board-selector-header">
+          <ListSubheader component="div" id="board-selector-header">
             Select a Board
-          </ListSubHeader>
+          </ListSubheader>
         }
       >
         {props.boards.map((board) => {
@@ -39,7 +32,7 @@ export default function BoardSelector(props: Props): JSX.Element {
               <ListItemIcon>
                 <Icon>grid_view</Icon>
               </ListItemIcon>
-              <ListItemText primary={board.name} />
+              <ListItemText primary={board.title} />
             </ListItem>
           );
         })}

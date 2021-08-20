@@ -19,6 +19,7 @@ exports.loadCard = asyncHandler(async (req, res) => {
 exports.createCard = asyncHandler(async (req, res, next) => {
   const { columnId, boardId, title, tag, deadline, description } = req.body;
   const column = await Column.findOne({ _id: columnId, boardId: boardId });
+
   if (!column) {
     res.status(404);
     throw new Error("No Column found");
@@ -45,10 +46,13 @@ exports.createCard = asyncHandler(async (req, res, next) => {
     boardId: boardId,
     images: [...images],
   });
+
   column.cards.push(newCard);
+  column.cardOrder.push(newCard._id);
   column.save();
   res.status(200).json(newCard);
 });
+
 exports.updateCard = asyncHandler(async (req, res) => {
   const card = await Card.findById(req.params.id);
   if (!card) {
@@ -57,11 +61,13 @@ exports.updateCard = asyncHandler(async (req, res) => {
   }
 
   const { currentImages, title, tag, deadline, description } = req.body;
+
   // currentImages is an array containing the keys of current images in the card
   // update the images in db based on the current images in the card
   if (card.images.length && currentImages.length) {
     await deleteImagesInS3(card.images, currentImages);
   }
+
   const files = req.files;
   let images = [];
   // if user additionally upload new image, save them as well
@@ -74,6 +80,7 @@ exports.updateCard = asyncHandler(async (req, res) => {
       })
     );
   }
+
   card.tag = tag ? tag : card.tag;
   card.deadline = deadline ? deadline : card.deadline;
   card.description = description ? description : card.description;
@@ -86,26 +93,36 @@ exports.updateCard = asyncHandler(async (req, res) => {
 
 // Move Card between columns
 exports.moveCard = asyncHandler(async (req, res) => {
-  const { currentColumnId, newColumnId, sourceIndex, destinationIndex } =
-    req.body;
+  const {
+    sourceId: currentColumnId,
+    destinationId: newColumnId,
+    sourceIndex,
+    destinationIndex,
+  } = req.body;
   const card = await Card.findById(req.params.id);
   const currentColumn = await Column.findById(currentColumnId);
+
+  currentColumn.cardOrder.splice(sourceIndex, 1);
   // if the card moved within the same column, change card's index within the array
   if (currentColumnId === newColumnId) {
-    currentColumn.cards.splice(sourceIndex, 1);
-    currentColumn.cards.splice(destinationIndex, 0, card._id);
-    card.save();
-  }
-  // if the card moved tod a different column, first update card's column, remove it from current column,
-  // add it in the new column
-  else {
+    currentColumn.cardOrder.splice(destinationIndex, 0, card._id);
+    currentColumn.save();
+  } else {
+    currentColumn.cards.map((c, index) => {
+      if (c._id === card._id) {
+        currentColumn.cards.splice(index, 1);
+      }
+    });
+    currentColumn.save();
+
     card.columnId = newColumnId;
     card.save();
-    currentColumn.cards.splice(sourceIndex, 1);
-    currentColumn.save();
+
     const newColumn = await Column.findById(newColumnId);
-    newColumn.cards.splice(destinationIndex, 0, card._id);
+    newColumn.cards.push(card);
+    newColumn.cardOrder.splice(destinationIndex, 0, card._id);
     newColumn.save();
   }
-  res.status(200).json(card);
+
+  res.status(204);
 });

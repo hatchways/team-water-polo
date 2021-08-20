@@ -3,19 +3,19 @@ import { Grid, Button } from '@material-ui/core';
 import useStyles from './useStyles';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { IPropColumn, IPropTask, INewTask } from '../../interface/Board';
+import { IPropColumn, IPropCard, INewCard } from '../../interface/Board';
 import Task from './Task';
-import NewTaskForm from './Forms/NewTaskForm';
+import NewCardForm from './Forms/NewCardForm';
 import { theme } from '../../themes/theme';
 
 interface Props {
   column: IPropColumn;
-  tasks: IPropTask[];
+  cards: IPropCard[];
   index: number;
-  addTask: (newTask: INewTask) => void;
+  addCard: (newCard: INewCard) => void;
 }
 
-export default function Column({ column, tasks, index, addTask }: Props): JSX.Element {
+export default function Column({ column, cards, index, addCard }: Props): JSX.Element {
   const classes = useStyles(theme);
   const [showForm, setShowForm] = useState(false);
 
@@ -24,7 +24,7 @@ export default function Column({ column, tasks, index, addTask }: Props): JSX.El
   };
 
   return (
-    <Draggable draggableId={column.id} index={index}>
+    <Draggable draggableId={column._id} index={index}>
       {(provided) => (
         <Grid container item className={classes.columnContainer} ref={provided.innerRef} {...provided.draggableProps}>
           <Grid
@@ -37,17 +37,17 @@ export default function Column({ column, tasks, index, addTask }: Props): JSX.El
             <h2>{column.title}</h2>
             <MoreHorizIcon color="disabled" />
           </Grid>
-          <Droppable droppableId={column.id} type="TASK">
+          <Droppable droppableId={column._id} type="CARD">
             {(provided) => (
-              <Grid className={classes.taskList} ref={provided.innerRef} {...provided.droppableProps}>
-                {tasks.map((task, idx) => (
-                  <Task key={task.id} task={task} index={idx} />
+              <Grid className={classes.cardList} ref={provided.innerRef} {...provided.droppableProps}>
+                {cards.map((card, idx) => (
+                  <Task key={card._id} card={card} index={idx} />
                 ))}
                 {provided.placeholder}
                 {showForm ? (
-                  <NewTaskForm addTask={addTask} closeForm={handleClick} columnId={column.id} />
+                  <NewCardForm addCard={addCard} closeForm={handleClick} columnId={column._id} />
                 ) : (
-                  <Button className={classes.newTaskBtn} onClick={handleClick}>
+                  <Button className={classes.newCardButton} onClick={handleClick}>
                     Add a card...
                   </Button>
                 )}

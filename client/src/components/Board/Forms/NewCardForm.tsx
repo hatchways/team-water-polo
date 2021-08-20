@@ -1,26 +1,26 @@
 import { Card, CardContent, Typography, Grid, Button, IconButton, InputBase } from '@material-ui/core';
-import { INewTask } from '../../../interface/Board';
+import { INewCard } from '../../../interface/Board';
 import useStyles from '../useStyles';
 import { useImmer } from 'use-immer';
 
 // white, green, red, orange, blue, purple
 const tagColors = ['#fff', '#5acd76', '#ff5d48', '#edab1d', '#59b0ff', '#d460f7'];
-const initialState = { content: '', tag: '', error: false };
+const initialState = { title: '', tag: '', error: false };
 
 interface Props {
-  addTask: (newTask: INewTask) => void;
+  addCard: (newCard: INewCard) => void;
   closeForm: () => void;
   columnId: string;
 }
 
-export default function NewTaskForm({ addTask, closeForm, columnId }: Props): JSX.Element {
+export default function NewCardForm({ addCard, closeForm, columnId }: Props): JSX.Element {
   const classes = useStyles();
 
   const [form, updateForm] = useImmer(initialState);
 
-  const updateContent = (content: string) => {
+  const updateTitle = (title: string) => {
     updateForm((draft) => {
-      draft.content = content;
+      draft.title = title;
     });
   };
 
@@ -31,9 +31,9 @@ export default function NewTaskForm({ addTask, closeForm, columnId }: Props): JS
   };
 
   const handleSubmit = () => {
-    if (form.content) {
-      addTask({
-        content: form.content,
+    if (form.title) {
+      addCard({
+        title: form.title,
         tag: form.tag,
         columnId: columnId,
       });
@@ -48,13 +48,13 @@ export default function NewTaskForm({ addTask, closeForm, columnId }: Props): JS
 
   return (
     <Grid>
-      <Card className={classes.newTaskContainer}>
+      <Card className={classes.newCardContainer}>
         <CardContent className={classes.inputContainer}>
           <InputBase
             required
             name="content"
             defaultValue="Add title..."
-            onChange={(e) => updateContent(e.target.value)}
+            onChange={(e) => updateTitle(e.target.value)}
             className={classes.contentInput}
             error={form.error}
             fullWidth

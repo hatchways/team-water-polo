@@ -48,7 +48,7 @@ export default function NewColumnButton({ toggleModal, setColumnSide, side }: Pr
   return (
     <HoverableZone setHover={setHover}>
       {hover && (
-        <IconButton onClick={handleClick} className={classes.addColumnBtn}>
+        <IconButton onClick={handleClick} className={classes.addColumnButton}>
           <AddCircleOutlineIcon className={classes.icon} />
         </IconButton>
       )}

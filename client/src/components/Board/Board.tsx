@@ -4,20 +4,25 @@ import useStyles from './useStyles';
 import { Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import Column from './Column';
 import NewColumnButton from './NewColumnButton';
-import mockData from './mockData';
 import MainModal from './Modals/MainModal';
-import { INewTask } from '../../interface/Board';
-import { useImmerReducer } from 'use-immer';
-import reducer, { setDraggedColumn, setDraggedTask, setNewColumn, setNewTask } from '../../utils/reducer';
+import { IBoardData, INewCard } from '../../interface/Board';
+import { setDraggedColumn, setDraggedCard, setNewColumn, setNewCard } from '../../utils/reducer';
+import { addCardToDb, addColumnToDb } from '../../utils/thunk';
+import { IMoveAction } from '../../interface/BoardActions';
 import Saving from './Saving';
 
-export default function Board(): JSX.Element {
+type dispatchTypes = INewCard | IMoveAction | string | { title: string; side: string };
+
+interface Props {
+  state: IBoardData;
+  dispatch: (arg: dispatchTypes) => void;
+}
+
+export default function Board({ state, dispatch }: Props): JSX.Element {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [columnSide, setColumnSide] = useState('');
   const [saving, setSaving] = useState(false);
-
-  const [state, dispatch] = useImmerReducer(reducer, mockData);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -41,21 +46,29 @@ export default function Board(): JSX.Element {
       return;
     }
 
-    const taskData = {
+    const cardData = {
       ...columnData,
       sourceId: source.droppableId,
       destinationId: destination.droppableId,
     };
 
-    dispatch(setDraggedTask(taskData));
+    dispatch(setDraggedCard(cardData));
   };
 
-  const addTask = (newTask: INewTask) => {
-    dispatch(setNewTask(newTask));
+  const addCard = async (newCard: INewCard) => {
+    await addCardToDb(newCard, state.id)
+      .then((card) => {
+        dispatch(setNewCard(card));
+      })
+      .catch((err) => console.log(err));
   };
 
-  const addColumn = (title: string) => {
-    dispatch(setNewColumn(title, columnSide));
+  const addColumn = async (title: string) => {
+    await addColumnToDb(title, columnSide, state.id)
+      .then((column) => {
+        dispatch(setNewColumn(column, columnSide));
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -73,11 +86,11 @@ export default function Board(): JSX.Element {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {state &&
+                {state.id &&
                   state.columnOrder.map((columnId, index) => {
                     const column = state.columns[columnId];
-                    const tasks = column.taskIds.map((taskId: string) => state.tasks[taskId]);
-                    return <Column key={column.id} column={column} tasks={tasks} index={index} addTask={addTask} />;
+                    const cards = column.cardOrder.map((cardId: string) => state.cards[cardId]);
+                    return <Column key={column._id} column={column} cards={cards} index={index} addCard={addCard} />;
                   })}
                 {provided.placeholder}
               </Grid>
@@ -86,7 +99,7 @@ export default function Board(): JSX.Element {
         </DragDropContext>
       </Grid>
       <NewColumnButton toggleModal={toggleModal} setColumnSide={setColumnSide} side={'right'} />
-      <MainModal isOpen={isOpen} isColumn={true} closeModal={toggleModal} addColumn={addColumn} />
+      <MainModal isOpen={isOpen} closeModal={toggleModal} submitForm={addColumn} kind={'column'} />
     </Grid>
   );
 }
