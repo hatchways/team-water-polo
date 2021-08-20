@@ -1,4 +1,4 @@
-export function mapToBoard(data) {
+const mapToBoard = (data) => {
   const cards = {};
   const columns = {};
 
@@ -14,4 +14,6 @@ export function mapToBoard(data) {
     columns: columns,
     columnOrder: data.columnOrder,
   };
-}
+};
+
+module.exports = mapToBoard;

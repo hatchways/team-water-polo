@@ -13,37 +13,12 @@ export default function Dashboard(): JSX.Element {
   const classes = useStyles();
   const [activeTab, setActiveTab] = useState('board');
   const [open, setOpen] = useState(false);
-  
-  const { state, dispatch, createNewBoard } = useBoard();
+  const [selectorShown, setSelectorShown] = useState(false);
 
-  const [activeBoard, setActiveBoard] = useState({
-    board_selector_shown: false,
-    boards: [
-      {
-        id: 'school',
-        name: 'My School Board',
-      },
-      {
-        id: 'personal',
-        name: 'Personal Board',
-      },
-      {
-        id: 'shopping',
-        name: 'Shopping Lists & Purchases',
-      },
-      {
-        id: 'business',
-        name: 'Business Ideas',
-      },
-    ],
-    current_board: 'school',
-  });
+  const { state, dispatch, boardList, setActiveBoard, createNewBoard } = useBoard();
 
-  const toggleBoardSelector = (event: React.MouseEvent) => {
-    setActiveBoard((prevState) => {
-      const board_selector_shown = !prevState.board_selector_shown;
-      return Object.assign({}, prevState, { board_selector_shown });
-    });
+  const toggleBoardSelector = () => {
+    setSelectorShown((prevState) => !prevState);
   };
 
   const selectBoard = (event: React.MouseEvent) => {
@@ -53,21 +28,7 @@ export default function Dashboard(): JSX.Element {
       board_button = board_button.parentNode as HTMLElement;
       board_id = board_button.dataset.board_id;
     }
-
-    setActiveBoard((prevState) => {
-      return Object.assign({}, prevState, {
-        current_board: board_id,
-        board_selector_shown: !prevState.board_selector_shown,
-      });
-    });
-  };
-
-  const getCurrentBoardName = () => {
-    const current_board_id = state.current_board;
-    const current_board = state.boards.filter((board) => {
-      return board.id === current_board_id;
-    })[0];
-    return current_board.name;
+    setActiveBoard(board_id);
   };
 
   const toggleModal = () => {
@@ -134,15 +95,19 @@ export default function Dashboard(): JSX.Element {
           </IconButton>
         </Grid>
         <BoardSelector
-          open={activeBoard.board_selector_shown}
+          open={selectorShown}
           onClose={toggleBoardSelector}
-          boards={activeBoard.boards}
+          boards={boardList}
           onBoardSelect={selectBoard}
         />
       </Grid>
       <MainModal isOpen={open} closeModal={toggleModal} submitForm={createNewBoard} kind={'board'} />
       {state?.id ? (
-          {activeTab === 'calendar' ? <MyCalendar /> : <Board state={state} dispatch={dispatch} /> }
+        activeTab === 'calendar' ? (
+          <MyCalendar />
+        ) : (
+          <Board state={state} dispatch={dispatch} />
+        )
       ) : (
         <Grid container justifyContent="center" alignItems="center" style={{ height: '70vh' }}>
           <Link component="button" variant="h6" color="primary" onClick={toggleModal}>

@@ -11,7 +11,9 @@ export interface IBoardData {
 export interface IBoardContext {
   state: IBoardData | undefined;
   dispatch: (arg: INewCard | IMoveAction | string | { title: string; side: string }) => void;
-  createNewBoard: (arg1: string) => void;
+  boardList: { title: string; id: string }[];
+  setActiveBoard: (arg: string) => void;
+  createNewBoard: (arg: string) => void;
 }
 
 export interface ICard {
